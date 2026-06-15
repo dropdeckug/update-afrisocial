@@ -8,10 +8,12 @@
   <script src="/linkify.js"></script>
   <link rel="icon" type="image/png" href="/uploads/favicon.png">
   <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="shared-nav.css">
   <link rel="stylesheet" href="search.css" />
 </head>
 <body>
-  
+<div class="x-layout">
+  <div data-shared-nav></div>
   <div id="searchOverlay" class="search-overlay" aria-hidden="false">
     <header class="search-header">
       <button id="closeSearch" class="back-btn">←</button>
@@ -59,7 +61,10 @@
       </section>
     </div>
   </div>
+  <div data-shared-rightrail></div>
+</div>
 
   <script src="search.js"></script>
+  <script src="shared-nav.js"></script>
 </body>
 </html>

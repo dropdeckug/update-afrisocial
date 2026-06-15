@@ -1,0 +1,10 @@
+{
+  "name": "afrisocial-frontend",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "node dev-server.cjs",
+    "build": "echo no-op",
+    "build:dev": "echo no-op"
+  }
+}

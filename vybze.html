@@ -10,7 +10,9 @@
   <meta name="theme-color" content="#000A23">
   <link rel="icon" type="image/png" href="/uploads/favicon.png">
   <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="shared-nav.css">
   <link rel="stylesheet" href="vybze.css">
+
 </head>
 <body>
 
@@ -39,70 +41,29 @@
     </div>
   </header>
 
-  <main class="vybze-main">
-    <div class="vybze-title-row">
-      <h2>🔥 Vybze</h2>
-    </div>
-    <div id="vybzeGrid" class="vybze-grid"></div>
-  </main>
+  <div class="x-layout">
+    <div data-shared-nav></div>
 
-  <nav class="bottom-nav">
-    <a href="feed.html" class="bnav-item">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
-        stroke="currentColor" stroke-width="2.2"
-        stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 10.5C4 9.9 4.3 9.3 4.8 8.9L11.3 3.7C11.7 3.4
-          12.3 3.4 12.7 3.7L19.2 8.9C19.7 9.3 20 9.9 20
-          10.5V18.5C20 19.6 19.1 20.5 18 20.5H6C4.9
-          20.5 4 19.6 4 18.5V10.5Z"/>
-        <path d="M9 20.5V14.5C9 13.9 9.4 13.5 10
-          13.5H14C14.6 13.5 15 13.9 15 14.5V20.5"/>
-      </svg>
-      <span>Home</span>
-    </a>
-    <a href="vybze.html" class="bnav-item active">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
-        stroke="currentColor" stroke-width="2.2"
-        stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="4"/>
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M12 9V3M12 21v-6M9 12H3M21 12h-6"/>
-      </svg>
-      <span>Vybze</span>
-    </a>
-    <a href="explore.html" class="bnav-item">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
-        stroke="currentColor" stroke-width="2.2"
-        stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <polygon points="16 8 14 14 8 16 10 10 16 8"/>
-      </svg>
-      <span>AfriExplore</span>
-    </a>
-    <a href="message.html" class="bnav-item" id="chatNavItem">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
-        stroke="currentColor" stroke-width="2.2"
-        stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1
-          2-2h14a2 2 0 0 1 2 2z"/>
-      </svg>
-      <span>Chats</span>
-      <span id="messageBadge" class="badge"></span>
-    </a>
-    <a href="profile.html" class="bnav-item">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
-        stroke="currentColor" stroke-width="2.2"
-        stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <circle cx="12" cy="9" r="3"/>
-        <path d="M6.5 18C7.5 15.5 9.7 14 12 14C14.3
-          14 16.5 15.5 17.5 18"/>
-      </svg>
-      <span>Profile</span>
-    </a>
-  </nav>
+    <main class="vybze-main">
+      <div class="vybze-title-row">
+        <h2>🔥 Vybze</h2>
+      </div>
+      <div id="vybzeGrid" class="vybze-grid">
+        <!-- skeleton cards -->
+        <div class="skeleton skeleton-rect" style="aspect-ratio: 9/16;"></div>
+        <div class="skeleton skeleton-rect" style="aspect-ratio: 9/16;"></div>
+        <div class="skeleton skeleton-rect" style="aspect-ratio: 9/16;"></div>
+        <div class="skeleton skeleton-rect" style="aspect-ratio: 9/16;"></div>
+        <div class="skeleton skeleton-rect" style="aspect-ratio: 9/16;"></div>
+        <div class="skeleton skeleton-rect" style="aspect-ratio: 9/16;"></div>
+      </div>
+    </main>
+
+    <div data-shared-rightrail></div>
+  </div>
 
   <script src="js/theme.js"></script>
+  <script src="shared-nav.js"></script>
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   <script src="/translate.js"></script>
   <script src="vybze.js"></script>

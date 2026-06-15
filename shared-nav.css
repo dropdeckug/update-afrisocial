@@ -89,6 +89,11 @@
   display: flex; align-items: center; justify-content: center;
 }
 
+/* Mobile clearance so floating bottom nav doesn't cover content */
+@media (max-width: 1024px) {
+  body { padding-bottom: 84px; }
+}
+
 /* Hide-on-fullscreen helper (vybze-player) */
 body.xn-hide-nav .xn-sidebar { display: none !important; }
 
@@ -105,8 +110,10 @@ body.xn-hide-nav .xn-sidebar { display: none !important; }
   }
 
   .xn-sidebar {
-    position: sticky;
-    top: 0; left: auto; transform: none;
+    position: fixed;
+    top: 0;
+    left: max(0px, calc((100vw - 1290px) / 2));
+    transform: none;
     width: 275px;
     max-width: 275px;
     height: 100vh;
@@ -123,6 +130,15 @@ body.xn-hide-nav .xn-sidebar { display: none !important; }
     padding: 8px 12px 16px;
     z-index: 50;
   }
+  /* When inside an .x-layout grid, become sticky instead of fixed so it
+     aligns naturally with the grid column. */
+  .x-layout .xn-sidebar {
+    position: sticky;
+    left: auto;
+  }
+  /* Body padding so fixed sidebar doesn't overlap content on pages that
+     are NOT wrapped in .x-layout. */
+  body:not(.xn-has-layout) { padding-left: 275px; }
   .xn-sidebar .xn-logo {
     display: flex;
     align-items: center; justify-content: center;

@@ -1,0 +1,4 @@
+[run]
+dev = "npx --yes serve -l 8080 ."
+build:dev = "true"
+build = "true"
