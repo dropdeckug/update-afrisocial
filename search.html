@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Afrisocial — Search</title>
+  <script src="/security.js"></script>
+  <script src="/linkify.js"></script>
+  <link rel="icon" type="image/png" href="/uploads/favicon.png">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="search.css" />
+</head>
+<body>
+  
+  <div id="searchOverlay" class="search-overlay" aria-hidden="false">
+    <header class="search-header">
+      <button id="closeSearch" class="back-btn">←</button>
+      <div class="search-input-wrap">
+        <input type="search" id="searchInput" placeholder="Search people, posts, videos, hashtags..." autocomplete="off" />
+        <button id="clearBtn" hidden>×</button>
+      </div>
+    </header>
+
+    <div class="search-body">
+      <!-- Recent Searches -->
+      <section id="recentSection">
+        <div class="section-header">
+          <h3>Recent</h3>
+          <button id="clearRecent">Clear</button>
+        </div>
+        <ul id="recentList"></ul>
+      </section>
+
+      <!-- Results -->
+      <section id="resultsSection" hidden>
+        <nav class="tabs" role="tablist">
+          <button class="tab active" data-tab="all">All</button>
+          <button class="tab" data-tab="people">People</button>
+          <button class="tab" data-tab="post">Posts</button>
+          <button class="tab" data-tab="videos">Videos</button>
+          <button class="tab" data-tab="hashtags">Hashtags</button>
+        </nav>
+
+        <div id="resultsMeta" class="results-meta"></div>
+
+        <div id="panel-all" class="panel active"></div>
+        <div id="panel-people" class="panel"></div>
+        <div id="panel-post" class="panel"></div>
+        <div id="panel-videos" class="panel"></div>
+        <div id="panel-hashtags" class="panel"></div>
+      </section>
+      
+      <!-- Empty State -->
+      <section id="emptySection" hidden>
+        <div class="empty-state">
+          <h3>No results</h3>
+          <p>Try a different search</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="search.js"></script>
+</body>
+</html>

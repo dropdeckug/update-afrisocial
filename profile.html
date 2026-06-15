@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <script src="/security.js"></script>
+  <script src="/linkify.js"></script>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000A23">
+  <link rel="icon" type="image/png" href="/uploads/favicon.png">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="mention.css" />
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+
+  <div id="google_translate_element" style="display:none;"></div>
+
+<div class="coverer">
+  <div class="sub-coverer">
+
+    <!-- ══ TOP BAR ══ -->
+    <div class="profile-top-bar">
+      <a href="#" onclick="openSideMenu()" id="hamburgerWrap" class="hamburger-wrap" style="display:none;">
+        <svg class="svg-menu" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+      </a>
+      <div id="reportBlockWrap" style="display:none;position:relative;margin-left:auto;">
+        <button id="reportBlockBtn" style="background:none;border:none;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;border-radius:50%;" title="Report or Block">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#EF4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </button>
+        <div id="reportBlockMenu" style="display:none;position:absolute;top:38px;right:0;background:white;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.16);z-index:300;min-width:180px;overflow:hidden;border:1px solid #F3F4F6;">
+          <button id="menuReportBtn" style="display:flex;align-items:center;gap:10px;width:100%;padding:14px 16px;border:none;border-bottom:1px solid #F9FAFB;background:white;font-size:14px;font-weight:600;color:#EF4444;cursor:pointer;text-align:left;font-family:inherit;">⚠️ Report User</button>
+          <button id="menuBlockBtn" style="display:flex;align-items:center;gap:10px;width:100%;padding:14px 16px;border:none;background:white;font-size:14px;font-weight:600;color:#374151;cursor:pointer;text-align:left;font-family:inherit;">🚫 Block</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side menu -->
+    <div class="side-menu-c" id="overlay" onclick="closeSideMenu()"></div>
+
+    <div id="mySideMenu" class="side-menu">
+      <a href="wallet.html">Wallet<div><svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div></a>
+      <a href="#" onclick="showComingSoon()">Creator's Insights<div><svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div></a>
+      <a href="referral.html">Referral Program<div><svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div></a>
+      <a href="settings.html">Settings & Privacy<div><svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div></a>
+    </div>
+
+    <div id="comingSoonModal" class="soon-modal">
+      <div class="soon-modal-content">
+        <span class="close-soon-modal" onclick="closeComingSoon()">&times;</span>
+        <h2>Coming Soon</h2>
+        <p>This feature will be available soon on <strong>Afrisocial</strong></p>
+      </div>
+    </div>
+
+    <!-- ══ PROFILE HEADER ══ -->
+    <div class="profile-header">
+      <div class="avatar-wrap">
+        <img id="profilePic" src="https://afrisocial-backend.onrender.com/uploads/images/africa.png" alt="profile picture" />
+        <button class="share-profile-btn" id="shareProfileBtn">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+        </button>
+      </div>
+
+      <h2 id="fullName" class="profile-fullname">Full Name</h2>
+
+      <div class="profile-username-row">
+        <span id="username" class="profile-username">@username</span>
+        <svg id="verifiedBadge" class="verified-badge" viewBox="0 0 24 24" style="display:none;">
+          <circle cx="12" cy="12" r="10" fill="#1DA1F2"/>
+          <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none"/>
+        </svg>
+        <span id="country" class="profile-flag">🌍</span>
+      </div>
+
+      <!-- OWNER: Edit Profile -->
+      <div id="ownerActions" style="display:none;">
+        <button id="openEditContainer" class="edit-profile-btn">Edit Profile</button>
+      </div>
+
+      <!-- PUBLIC: Follow + Message + Gift -->
+      <div id="publicActions" class="public-action-row" style="display:none;">
+        <button id="followBtn" class="follow-profile-btn">Follow</button>
+        <button id="messageBtn" class="message-profile-btn">Message</button>
+        <button id="profileGiftBtn" class="profile-gift-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 12 20 22 4 22 4 12"/>
+            <rect x="2" y="7" width="20" height="5"/>
+            <path d="M12 22V7"/>
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+          </svg>
+          Gift
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="profile-stats">
+        <div class="stat-item" id="openFollowersTab">
+          <span class="stat-num" id="followersCount">0</span>
+          <span class="stat-label">Followers</span>
+        </div>
+        <div class="stat-item" id="openFollowingTab">
+          <span class="stat-num" id="followingCount">0</span>
+          <span class="stat-label">Following</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="likesCount">0</span>
+          <span class="stat-label">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#e0245e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="starsCount">0</span>
+          <span class="stat-label">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#f4b400" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      <p class="profile-joined" id="joined">Joined --</p>
+    </div>
+
+    <!-- ══ 4 TABS ══ -->
+    <div class="profile-tabs">
+      <button class="tab-btn active" data-tab="about">About</button>
+      <button class="tab-btn" data-tab="posts">Posts</button>
+      <button class="tab-btn" data-tab="battlepolls">Battle Polls</button>
+      <button class="tab-btn" data-tab="afriexplore">AfriExplore</button>
+    </div>
+
+    <div class="profile-tab-content">
+
+      <!-- ABOUT TAB -->
+      <div id="aboutTab" class="tab-content active">
+        <div class="about-section">
+          <div class="about-section-header">
+            <span class="about-section-title">🔗 Socials</span>
+            <button class="about-action-btn owner-only" id="addSocialBtn">+ Add</button>
+          </div>
+          <div id="socialsList" class="socials-list"></div>
+        </div>
+        <div class="about-section">
+          <div class="about-section-header">
+            <span class="about-section-title">💼 Profession</span>
+            <button class="about-action-btn owner-only add-circle-btn" id="addProfessionBtn">+</button>
+          </div>
+          <p id="professionDisplay" class="about-value">—</p>
+        </div>
+        <div class="about-section">
+          <div class="about-section-header">
+            <span class="about-section-title">📝 Bio</span>
+            <button class="about-action-btn owner-only" id="editBioBtn">Edit</button>
+          </div>
+          <p id="bioDisplay" class="about-value">—</p>
+        </div>
+        <div class="about-section">
+          <div class="about-section-header">
+            <span class="about-section-title">📞 Contact Info</span>
+            <button class="about-action-btn owner-only" id="editContactBtn">Edit</button>
+          </div>
+          <p id="contactDisplay" class="about-value">—</p>
+        </div>
+        <div class="about-section">
+          <div class="about-section-header">
+            <span class="about-section-title">🌐 Website</span>
+            <button class="about-action-btn owner-only" id="editWebsiteBtn">Edit</button>
+          </div>
+          <p id="websiteDisplay" class="about-value">—</p>
+        </div>
+        <div class="about-section">
+          <div class="about-section-header">
+            <span class="about-section-title">🌍 Africa In</span>
+            <button class="about-action-btn owner-only" id="editAfricaInBtn">Edit</button>
+          </div>
+          <p id="africaInDisplay" class="about-value">—</p>
+        </div>
+      </div>
+
+      <!-- POSTS TAB -->
+      <div id="postsTab" class="tab-content"></div>
+
+      <!-- BATTLE POLLS TAB -->
+      <div id="battlepollsTab" class="tab-content">
+        <div id="pollsList"></div>
+      </div>
+
+      <!-- AFRIEXPLORE TAB -->
+      <div id="afriexploreTab" class="tab-content">
+        <div id="exploreList"></div>
+      </div>
+
+    </div>
+
+    <!-- ══ EDIT PROFILE SLIDE-IN ══ -->
+    <div class="edit-profile-container" id="editContainer" style="display:none;">
+      <div class="edit-header">
+        <h2>Edit Profile</h2>
+        <span id="closeEditContainer" class="close-x">&times;</span>
+      </div>
+      <div class="edit-avatar-section">
+        <div class="edit-avatar-wrap">
+          <img id="profilePreview" src="https://afrisocial-backend.onrender.com/uploads/images/africa.png" alt="preview" />
+          <label class="change-pic-btn" for="profileImage">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </label>
+          <input type="file" accept="image/*" id="profileImage" hidden />
+        </div>
+        <p class="edit-avatar-hint">Tap camera to change photo</p>
+      </div>
+      <div class="edit-field-group">
+        <label>Full Name</label>
+        <input type="text" id="editFullName" placeholder="Your full name" />
+      </div>
+      <div class="edit-field-group">
+        <label>Username</label>
+        <div class="username-input-wrap">
+          <span class="at-prefix">@</span>
+          <input type="text" id="editUsername" placeholder="username" class="username-field" />
+        </div>
+      </div>
+      <div class="edit-field-group">
+        <label>Country</label>
+        <select id="editCountry">
+          <option value="">-- Select Country --</option>
+          <option value="dz">🇩🇿 Algeria</option><option value="ao">🇦🇴 Angola</option><option value="bj">🇧🇯 Benin</option><option value="bw">🇧🇼 Botswana</option><option value="br">🇧🇷 Brazil</option><option value="bf">🇧🇫 Burkina Faso</option><option value="bi">🇧🇮 Burundi</option><option value="cv">🇨🇻 Cape Verde</option><option value="cm">🇨🇲 Cameroon</option><option value="cf">🇨🇫 Central African Republic</option><option value="td">🇹🇩 Chad</option><option value="km">🇰🇲 Comoros</option><option value="cd">🇨🇩 DR Congo</option><option value="cg">🇨🇬 Republic of Congo</option><option value="ci">🇨🇮 Côte d'Ivoire</option><option value="dj">🇩🇯 Djibouti</option><option value="eg">🇪🇬 Egypt</option><option value="gq">🇬🇶 Equatorial Guinea</option><option value="er">🇪🇷 Eritrea</option><option value="sz">🇸🇿 Eswatini</option><option value="et">🇪🇹 Ethiopia</option><option value="ga">🇬🇦 Gabon</option><option value="gm">🇬🇲 Gambia</option><option value="gh">🇬🇭 Ghana</option><option value="gn">🇬🇳 Guinea</option><option value="gw">🇬🇼 Guinea-Bissau</option><option value="ht">🇭🇹 Haiti</option><option value="jm">🇯🇲 Jamaica</option><option value="ke">🇰🇪 Kenya</option><option value="ls">🇱🇸 Lesotho</option><option value="lr">🇱🇷 Liberia</option><option value="ly">🇱🇾 Libya</option><option value="mg">🇲🇬 Madagascar</option><option value="mw">🇲🇼 Malawi</option><option value="ml">🇲🇱 Mali</option><option value="mr">🇲🇷 Mauritania</option><option value="mu">🇲🇺 Mauritius</option><option value="ma">🇲🇦 Morocco</option><option value="mz">🇲🇿 Mozambique</option><option value="na">🇳🇦 Namibia</option><option value="ne">🇳🇪 Niger</option><option value="ng">🇳🇬 Nigeria</option><option value="rw">🇷🇼 Rwanda</option><option value="st">🇸🇹 São Tomé and Príncipe</option><option value="sn">🇸🇳 Senegal</option><option value="sl">🇸🇱 Sierra Leone</option><option value="so">🇸🇴 Somalia</option><option value="za">🇿🇦 South Africa</option><option value="ss">🇸🇸 South Sudan</option><option value="sd">🇸🇩 Sudan</option><option value="tz">🇹🇿 Tanzania</option><option value="tg">🇹🇬 Togo</option><option value="tn">🇹🇳 Tunisia</option><option value="ug">🇺🇬 Uganda</option><option value="zm">🇿🇲 Zambia</option><option value="zw">🇿🇼 Zimbabwe</option><option value="us">🇺🇸 United States</option><option value="gb">🇬🇧 United Kingdom</option><option value="ca">🇨🇦 Canada</option>
+        </select>
+      </div>
+      <button id="saveProfileBtn" class="save-profile-btn">
+        <span id="saveBtnText">Save Changes</span>
+        <span id="saveBtnSpinner" class="spinner" style="display:none;"></span>
+      </button>
+    </div>
+
+    <!-- ══ FOLLOWERS SHEET ══ -->
+    <div class="sheet-modal" id="followersTab">
+      <div class="sheet-header">
+        <h2>Followers</h2>
+        <span id="closeFollowersTab" class="close-x">&times;</span>
+      </div>
+      <div id="followersList" class="user-list"></div>
+    </div>
+
+    <!-- ══ FOLLOWING SHEET ══ -->
+    <div class="sheet-modal" id="followingTab">
+      <div class="sheet-header">
+        <h2>Following</h2>
+        <span id="closeFollowingTab" class="close-x">&times;</span>
+      </div>
+      <div id="followingList" class="user-list"></div>
+    </div>
+
+    <!-- ══ ADD SOCIAL MODAL ══ -->
+    <div class="sheet-modal" id="addSocialModal">
+      <div class="sheet-header">
+        <h2>Add Social</h2>
+        <span id="closeAddSocial" class="close-x">&times;</span>
+      </div>
+      <div class="social-platform-grid">
+        <button data-platform="instagram" class="platform-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18"><defs><radialGradient id="ig2" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig2)"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="white" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg>Instagram
+        </button>
+        <button data-platform="facebook" class="platform-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>Facebook
+        </button>
+        <button data-platform="x" class="platform-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="#000"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>X / Twitter
+        </button>
+        <button data-platform="tiktok" class="platform-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="#000"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>TikTok
+        </button>
+        <button data-platform="youtube" class="platform-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12 9.545 15.568z"/></svg>YouTube
+        </button>
+        <button data-platform="linkedin" class="platform-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn
+        </button>
+        <button data-platform="snapchat" class="platform-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="12" fill="#FFFC00"/><path fill="#000" d="M12 4.2c-2.2 0-4 1.8-4 4v.9c0 .2 0 .3-.1.5l-.3 1.1c-.1.35-.45.6-.8.55l-.18-.03c-.09-.02-.18.03-.2.12v.01c0 .09.04.17.12.21.32.18.8.38 1.44.54.08.02.15.08.17.17l.06.32c.05.25.29.42.54.36l.02-.01c.23-.05.47-.08.71-.08.31 0 .63.04.96.14.6.18 1.15.58 1.66 1.2.12.14.23.29.33.43.05.07.13.1.22.1h.01c.09-.01.16-.07.18-.16.05-.14.19-.85.96-1.58.51-.47 1.06-.65 1.66-.65.24 0 .48.03.71.08l.02.01c.25.06.49-.11.54-.36l.06-.32c.02-.09.09-.15.17-.17.64-.16 1.12-.36 1.44-.54.08-.04.12-.12.12-.21v-.01c-.02-.09-.11-.14-.2-.12l-.18.03c-.35.05-.69-.2-.8-.55l-.3-1.1c-.06-.18-.09-.34-.09-.5v-.9c0-2.2-1.8-4-4-4z"/></svg>Snapchat
+        </button>
+        <button data-platform="threads" class="platform-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="#000"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.473 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.61 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.292 1.148-.067 2.187.053 3.105.358-.126-.585-.375-1.05-.74-1.388-.516-.47-1.277-.707-2.264-.707h-.065c-.788.006-2.047.212-2.647 1.33l-1.733-.98c.545-1.021 1.478-2.237 4.126-2.25h.077c1.567 0 2.99.473 3.963 1.369 1.062.977 1.61 2.396 1.61 4.22 0 .293-.013.596-.039.898.768.537 1.36 1.2 1.733 1.97.836 1.818.867 4.502-1.47 6.783C17.394 23.19 15.276 24 12.186 24z"/></svg>Threads
+        </button>
+      </div>
+      <div id="socialHandleInput" style="display:none;margin-top:14px;">
+        <label id="socialHandleLabel" style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Handle</label>
+        <input type="text" id="socialHandleValue" placeholder="@yourhandle" class="sheet-input" />
+        <button id="saveSocialBtn" class="save-btn">Save</button>
+      </div>
+    </div>
+
+    <!-- ══ PROFESSION MODAL ══ -->
+    <div class="sheet-modal" id="professionModal">
+      <div class="sheet-header">
+        <h2>Select Profession</h2>
+        <span id="closeProfessionModal" class="close-x">&times;</span>
+      </div>
+      <div class="profession-grid">
+        <button class="profession-btn" data-val="Software Developer">💻 Software Developer</button>
+        <button class="profession-btn" data-val="Backend Developer">⚙️ Backend Developer</button>
+        <button class="profession-btn" data-val="Frontend Developer">🎨 Frontend Developer</button>
+        <button class="profession-btn" data-val="UI/UX Designer">✏️ UI/UX Designer</button>
+        <button class="profession-btn" data-val="Graphic Designer">🖼️ Graphic Designer</button>
+        <button class="profession-btn" data-val="Data Scientist">📊 Data Scientist</button>
+        <button class="profession-btn" data-val="Entrepreneur">🚀 Entrepreneur</button>
+        <button class="profession-btn" data-val="Student">🎓 Student</button>
+        <button class="profession-btn" data-val="Doctor">🩺 Doctor</button>
+        <button class="profession-btn" data-val="Nurse">💊 Nurse</button>
+        <button class="profession-btn" data-val="Teacher">📚 Teacher</button>
+        <button class="profession-btn" data-val="Lawyer">⚖️ Lawyer</button>
+        <button class="profession-btn" data-val="Accountant">🧾 Accountant</button>
+        <button class="profession-btn" data-val="Journalist">📰 Journalist</button>
+        <button class="profession-btn" data-val="Photographer">📷 Photographer</button>
+        <button class="profession-btn" data-val="Musician">🎵 Musician</button>
+        <button class="profession-btn" data-val="Content Creator">📱 Content Creator</button>
+        <button class="profession-btn" data-val="Athlete">🏆 Athlete</button>
+        <button class="profession-btn" data-val="Engineer">🔧 Engineer</button>
+        <button class="profession-btn" data-val="Scientist">🔬 Scientist</button>
+        <button class="profession-btn" data-val="Chef">👨‍🍳 Chef</button>
+        <button class="profession-btn" data-val="Artist">🎨 Artist</button>
+        <button class="profession-btn" data-val="Model">💃 Model</button>
+        <button class="profession-btn" data-val="Business Owner">🏢 Business Owner</button>
+      </div>
+    </div>
+
+    <!-- ══ BIO MODAL ══ -->
+    <div class="sheet-modal" id="bioModal">
+      <div class="sheet-header">
+        <h2>Edit Bio</h2>
+        <span id="closeBioModal" class="close-x">&times;</span>
+      </div>
+      <textarea id="bioInput" class="sheet-textarea" placeholder="Tell your story..."></textarea>
+      <button id="saveBioBtn" class="save-btn">Save</button>
+    </div>
+
+    <!-- ══ CONTACT MODAL ══ -->
+    <div class="sheet-modal" id="contactModal">
+      <div class="sheet-header">
+        <h2>Contact Info</h2>
+        <span id="closeContactModal" class="close-x">&times;</span>
+      </div>
+      <input type="text" id="contactInput" class="sheet-input" placeholder="Email or phone number" />
+      <button id="saveContactBtn" class="save-btn">Save</button>
+    </div>
+
+    <!-- ══ WEBSITE MODAL ══ -->
+    <div class="sheet-modal" id="websiteModal">
+      <div class="sheet-header">
+        <h2>Website</h2>
+        <span id="closeWebsiteModal" class="close-x">&times;</span>
+      </div>
+      <input type="url" id="websiteInput" class="sheet-input" placeholder="https://yourwebsite.com" />
+      <button id="saveWebsiteBtn" class="save-btn">Save</button>
+    </div>
+
+    <!-- ══ AFRICA IN MODAL ══ -->
+    <div class="sheet-modal" id="africaInModal">
+      <div class="sheet-header">
+        <h2>Africa In</h2>
+        <span id="closeAfricaInModal" class="close-x">&times;</span>
+      </div>
+      <input type="text" id="africaInInput" class="sheet-input" placeholder="e.g. Lagos, Nigeria" />
+      <button id="saveAfricaInBtn" class="save-btn">Save</button>
+    </div>
+
+    <!-- ══ VOTE MODAL ══ -->
+    <div class="sheet-modal" id="voteModal">
+      <div class="sheet-header">
+        <h2>Cast Your Vote</h2>
+        <span id="cancelVote" class="close-x">&times;</span>
+      </div>
+      <p id="voteQuestion" class="vote-question"></p>
+      <div id="voteOptions" class="vote-options"></div>
+      <div id="voteThanks" style="display:none;" class="vote-thanks">
+        <div class="vote-thanks-icon">🎉</div>
+        <h3>Vote Cast!</h3>
+        <p id="voteTotalCount"></p>
+      </div>
+    </div>
+
+    <!-- ══ RESPOND MODAL ══ -->
+    <div class="sheet-modal" id="respondModal">
+      <div class="sheet-header">
+        <h2>Respond</h2>
+        <span id="cancelRespond" class="close-x">&times;</span>
+      </div>
+      <p id="respondPollTitle" class="respond-poll-title"></p>
+      <textarea id="respondInput" class="sheet-textarea" data-mention placeholder="Write your response..."></textarea>
+      <button id="respondMediaBtn" class="about-action-btn" style="margin-bottom:10px;">📎 Attach media</button>
+      <input type="file" id="respondMedia" accept="image/*,video/*" hidden />
+      <button id="submitRespond" class="save-btn">Post Response</button>
+    </div>
+
+    <!-- ══ GUEST MODAL ══ -->
+    <div class="guest-modal" id="guestModal">
+      <div class="guest-modal-box">
+        <h3>Join Afrisocial</h3>
+        <p>Sign up or log in to interact with this profile.</p>
+        <a href="/signup.html" class="guest-signup-btn">Sign Up</a>
+        <a href="/login.html" class="guest-login-btn">Log In</a>
+        <button id="closeGuestModal" class="guest-close">Maybe later</button>
+      </div>
+    </div>
+
+    <!-- ══ COMMENT MODAL ══ -->
+    <div id="commentModal" class="comment-modal">
+      <div class="comment-box">
+        <div class="comment-header">
+          <h3>Comments</h3>
+          <span id="closeCommentModal">&times;</span>
+        </div>
+        <div id="commentList" class="comment-list"></div>
+        <div class="comment-input-row">
+          <input type="text" id="commentInput" data-mention placeholder="Write a comment..." />
+          <button id="sendCommentBtn">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PROFILE GIFT MODAL ══ -->
+    <div id="profileGiftModal" class="feed-gift-overlay" style="display:none;">
+      <div class="feed-gift-box">
+        <div class="feed-gift-header">
+          <button class="feed-gift-back" id="profileGiftClose">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          </button>
+          <h3>Send a Gift</h3>
+        </div>
+        <div class="feed-gift-balance-row">
+          <div class="feed-gift-bal">
+            <span>⭐</span>
+            <span id="profileGiftStarBal">0</span>
+            <span>stars</span>
+          </div>
+          <button class="feed-gift-recharge-btn" id="profileGiftRechargeBtn" style="display:none;">Recharge</button>
+        </div>
+        <div class="feed-gift-grid" id="profileGiftGrid"></div>
+        <button class="feed-gift-send-btn" id="profileGiftSendBtn">Send Gift</button>
+      </div>
+    </div>
+
+    <!-- ══ BOTTOM NAV ══ -->
+    <nav class="bottom-nav">
+      <a href="feed.html" class="bnav-item">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 10.5C4 9.9 4.3 9.3 4.8 8.9L11.3 3.7C11.7 3.4 12.3 3.4 12.7 3.7L19.2 8.9C19.7 9.3 20 9.9 20 10.5V18.5C20 19.6 19.1 20.5 18 20.5H6C4.9 20.5 4 19.6 4 18.5V10.5Z"/>
+          <path d="M9 20.5V14.5C9 13.9 9.4 13.5 10 13.5H14C14.6 13.5 15 13.9 15 14.5V20.5"/>
+        </svg>
+        <span>Home</span>
+      </a>
+      <a href="/vybze.html" class="bnav-item">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="3"/>
+          <path d="M12 9V3M12 21v-6M9 12H3M21 12h-6"/>
+        </svg>
+        <span>Vybze</span>
+      </a>
+      <a href="explore.html" class="bnav-item">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polygon points="16 8 14 14 8 16 10 10 16 8"/>
+        </svg>
+        <span>AfriExplore</span>
+      </a>
+      <a href="message.html" class="bnav-item" id="messageIcon">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span>Chats</span>
+        <span id="messageBadge" class="badge" style="display:none;">0</span>
+      </a>
+      <a href="profile.html" class="bnav-item active">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><circle cx="12" cy="9" r="3"/>
+          <path d="M6.5 18C7.5 15.5 9.7 14 12 14C14.3 14 16.5 15.5 17.5 18"/>
+        </svg>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+  </div>
+</div>
+
+<div class="overlay hidden" id="overlay"></div>
+<script src="js/theme.js"></script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="/translate.js"></script>
+<script src="profile.js"></script>
+</body>
+          </html>

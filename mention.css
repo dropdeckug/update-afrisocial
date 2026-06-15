@@ -1,0 +1,97 @@
+.mention-dropdown {
+  position: absolute;
+  width: 280px;
+  max-height: 320px;
+  overflow-y: auto;
+  pointer-events: auto;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+
+  z-index: 1000000;
+
+  animation: fadeIn 0.12s ease-in-out;
+  font-family: inherit;
+  margin-top: -40%;
+  margin-left: 70%;
+}
+
+/* Each user item */
+.mention-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 12px;
+  cursor: pointer;
+
+  transition: background 0.15s ease;
+}
+
+/* Hover effect */
+.mention-item:hover {
+  background: #f3f4f6;
+}
+
+/* Profile image */
+.mention-item img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Text container */
+.mention-item strong {
+  font-size: 14px;
+  color: #111827;
+  font-weight: 600;
+}
+
+.mention-item small {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Smooth appearance */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar styling (optional but clean) */
+.mention-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mention-dropdown::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.mention-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mention-item.active {
+  background: #e5e7eb;
+}
+
+
+@media (max-width: 600px) {
+  .mention-dropdown {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92vw;
+  }
+}

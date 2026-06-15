@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vybze Player</title>
+  <script src="/security.js"></script>
+  <script src="/linkify.js"></script>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000A23">
+  <link rel="icon" type="image/png" href="/uploads/favicon.png">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="mention.css" />
+  <link rel="stylesheet" href="vybze-player.css">
+</head>
+<body>
+
+  <div id="google_translate_element" style="display:none;"></div>
+
+  <!-- ══ TOP BAR ══ -->
+  <div class="vybze-top-bar" id="vybzeTopBar">
+    <button class="vybze-top-btn" id="vybzeBackBtn">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+        stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+    </button>
+    <span class="vybze-top-title">Vybze</span>
+    <div class="vybze-top-right">
+      <button class="vybze-top-btn" id="vybzeSearchBtn">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+          stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+      <button class="vybze-top-btn" id="vybzeMoreBtn">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+          stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="5" r="1" fill="currentColor"/>
+          <circle cx="12" cy="12" r="1" fill="currentColor"/>
+          <circle cx="12" cy="19" r="1" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ PLAYER ══ -->
+  <div id="vybzePlayer" class="vybze-player"></div>
+
+  <!-- ══ COMMENT MODAL ══ -->
+  <div id="commentModal" class="comment-modal">
+    <div class="comment-box">
+      <div class="comment-header">
+        <h3>Comments</h3>
+        <span id="closeCommentModal">&times;</span>
+      </div>
+      <div id="commentList" class="comment-list"></div>
+      <div class="comment-input-row" id="commentInputRow">
+        <input type="text" id="commentInput"
+          data-mention
+          placeholder="Write a comment..." />
+        <button id="sendCommentBtn">Send</button>
+      </div>
+      <div class="comment-guest-row" id="commentGuestRow"
+        style="display:none;">
+        <p>
+          <a href="/signup.html" id="commentSignupLink">Sign up</a>
+          or
+          <a href="/login.html" id="commentLoginLink">log in</a>
+          to join the conversation
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SHARE MODAL ══ -->
+  <div id="shareModal" class="share-modal">
+    <div class="share-content">
+      <h3>Share</h3>
+      <div class="share-grid">
+        <button class="share-option" id="shareWhatsapp">
+          <img src="/icons/images (3).jpeg" />
+          <span>WhatsApp</span>
+        </button>
+        <button class="share-option" id="shareFacebook">
+          <img src="/icons/Logo_de_Facebook.png" />
+          <span>Facebook</span>
+        </button>
+        <button class="share-option" id="shareCopy">
+          <img src="/icons/images (4).jpeg" />
+          <span>Copy Link</span>
+        </button>
+        <button class="share-option" id="shareNative">
+          <img src="/icons/favicon.png" />
+          <span>Share</span>
+        </button>
+      </div>
+      <button id="closeShareModal" class="share-close">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ══ GUEST MODAL ══ -->
+  <div id="loginPromptModal" class="login-modal">
+    <div class="login-modal-content">
+      <div class="login-modal-icon">🎬</div>
+      <h2>Join Afrisocial to keep watching</h2>
+      <p>
+        Sign up or log in to watch full videos,
+        follow creators, and interact with the community.
+      </p>
+      <a href="/signup.html" class="login-modal-btn primary"
+        id="guestSignupBtn">Sign Up — It's Free</a>
+      <a href="/login.html" class="login-modal-btn outline"
+        id="guestLoginBtn">Log In</a>
+    </div>
+  </div>
+
+  <!-- ══ VYBZE GIFT MODAL ══ -->
+  <div id="vybzeGiftModal" class="feed-gift-overlay" style="display:none;">
+    <div class="feed-gift-box">
+      <div class="feed-gift-header">
+        <button class="feed-gift-back" id="vybzeGiftClose">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
+            stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+        </button>
+        <h3>Send a Gift</h3>
+      </div>
+      <div class="feed-gift-balance-row">
+        <div class="feed-gift-bal">
+          <span>⭐</span>
+          <span id="vybzeGiftStarBal">0</span>
+          <span>stars</span>
+        </div>
+        <button class="feed-gift-recharge-btn" id="vybzeGiftRechargeBtn"
+          style="display:none;">Recharge</button>
+      </div>
+      <div class="feed-gift-grid" id="vybzeGiftGrid"></div>
+      <button class="feed-gift-send-btn" id="vybzeGiftSendBtn">Send Gift</button>
+    </div>
+  </div>
+
+  <!-- ══ TOAST ══ -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ══ BOTTOM NAV ══ -->
+  <nav class="bottom-nav">
+    <a href="feed.html" class="bnav-item">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 10.5C4 9.9 4.3 9.3 4.8 8.9L11.3 3.7C11.7 3.4
+          12.3 3.4 12.7 3.7L19.2 8.9C19.7 9.3 20 9.9 20
+          10.5V18.5C20 19.6 19.1 20.5 18 20.5H6C4.9
+          20.5 4 19.6 4 18.5V10.5Z"/>
+        <path d="M9 20.5V14.5C9 13.9 9.4 13.5 10
+          13.5H14C14.6 13.5 15 13.9 15 14.5V20.5"/>
+      </svg>
+      <span>Home</span>
+    </a>
+    <a href="vybze.html" class="bnav-item active">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="4"/>
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M12 9V3M12 21v-6M9 12H3M21 12h-6"/>
+      </svg>
+      <span>Vybze</span>
+    </a>
+    <a href="explore.html" class="bnav-item">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polygon points="16 8 14 14 8 16 10 10 16 8"/>
+      </svg>
+      <span>AfriExplore</span>
+    </a>
+    <a href="message.html" class="bnav-item" id="chatNavItem">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1
+          2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span>Chats</span>
+      <span id="messageBadge" class="badge"></span>
+    </a>
+    <a href="profile.html" class="bnav-item">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="12" cy="9" r="3"/>
+        <path d="M6.5 18C7.5 15.5 9.7 14 12 14C14.3
+          14 16.5 15.5 17.5 18"/>
+      </svg>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <script src="js/theme.js"></script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script src="/translate.js"></script>
+  <script src="vybze-player.js"></script>
+</body>
+</html>

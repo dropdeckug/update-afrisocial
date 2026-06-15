@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Afrisocial Wallet</title>
+  <script src="/security.js"></script>
+  <script>
+    if (localStorage.getItem("afri_theme") === "dark")
+      document.body.classList.add("dark");
+  </script>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="wallet.css" />
+  <link rel="icon" type="image/png" href="/uploads/favicon.png" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ══ MAIN WALLET PAGE ══ -->
+  <main id="walletPage" class="page main-view">
+
+    <div class="top-section">
+      <header class="app-header">
+        <button class="icon-btn-outline" onclick="history.back()">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        <h2 class="header-title">Wallet</h2>
+        <div class="header-spacer"></div>
+      </header>
+
+      <div class="balance-cards">
+        <div class="balance-card">
+          <p class="balance-label">Available Balance</p>
+          <div class="balance-row">
+            <span id="currencySymbol" class="currency-sym">₦</span>
+            <span id="availableBalance" class="balance-amount">0.00</span>
+            <button id="refreshBtn" class="refresh-btn">
+              <i data-lucide="refresh-cw" width="16" height="16"></i>
+            </button>
+          </div>
+          <button class="convert-btn" id="convertBtn">
+            Convert to Stars ⭐
+          </button>
+        </div>
+
+        <div class="balance-card star-card">
+          <p class="balance-label">Star Balance</p>
+          <div class="balance-row">
+            <span class="star-sym">⭐</span>
+            <span id="starBalance" class="balance-amount">0</span>
+          </div>
+          <p class="star-sub">Purchased stars</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-content">
+      <section class="quick-actions">
+        <h3 class="section-heading">Quick Actions</h3>
+        <div class="actions-grid">
+          <button class="action-item" id="giftOutBtn">
+            <div class="action-icon-bg"><i data-lucide="gift"></i></div>
+            <p>Gift Out</p>
+          </button>
+          <button class="action-item" id="rechargeBtn">
+            <div class="action-icon-bg"><i data-lucide="zap"></i></div>
+            <p>Recharge</p>
+          </button>
+          <button class="action-item" id="withdrawBtn">
+            <div class="action-icon-bg"><i data-lucide="landmark"></i></div>
+            <p>Withdraw</p>
+          </button>
+          <button class="action-item" id="promoteBtn">
+            <div class="action-icon-bg"><i data-lucide="megaphone"></i></div>
+            <p>Promote</p>
+          </button>
+        </div>
+      </section>
+
+      <section class="quick-recharge">
+        <div class="section-row">
+          <h3 class="section-heading">Quick Recharge</h3>
+          <button class="view-all-link" id="seeMoreRecharge">See more</button>
+        </div>
+        <div class="recharge-scroll" id="rechargePackages"></div>
+      </section>
+
+      <section class="history-section">
+        <div class="history-header">
+          <h3 class="section-heading">Transaction History</h3>
+          <button id="openPanelBtn" class="view-all-link">View all</button>
+        </div>
+        <div id="miniList" class="transaction-list">
+          <div class="tx-empty">No transactions yet</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ══ TRANSACTION PANEL ══ -->
+  <div id="transactionsPanel" class="page side-panel">
+    <header class="panel-header">
+      <button id="closePanelBtn" class="icon-btn-outline dark">
+        <i data-lucide="chevron-left"></i>
+      </button>
+      <h2 class="panel-title">All Transactions</h2>
+      <div class="header-spacer"></div>
+    </header>
+    <div id="fullList" class="panel-scroll-content"></div>
+  </div>
+
+  <!-- ══ CREATE WALLET PIN MODAL (blocks page, no bypass) ══ -->
+  <div id="createPinModal" class="modal-overlay pin-setup-overlay hidden">
+    <div class="modal-box pin-setup-box">
+      <div class="pin-setup-header">
+        <div class="pin-setup-icon">🔐</div>
+        <h2 class="pin-setup-title">Create Wallet PIN</h2>
+        <p class="pin-setup-sub">Set a 4-digit PIN to secure all your transactions</p>
+      </div>
+      <div class="pin-setup-body">
+        <div class="pin-step" id="pinStep1">
+          <p class="pin-step-label">Enter PIN</p>
+          <div class="pin-inputs" id="createPinInputs">
+            <input type="password" maxlength="1" class="pin-box create-pin-box" inputmode="numeric" />
+            <input type="password" maxlength="1" class="pin-box create-pin-box" inputmode="numeric" />
+            <input type="password" maxlength="1" class="pin-box create-pin-box" inputmode="numeric" />
+            <input type="password" maxlength="1" class="pin-box create-pin-box" inputmode="numeric" />
+          </div>
+        </div>
+        <div class="pin-step hidden" id="pinStep2">
+          <p class="pin-step-label">Confirm PIN</p>
+          <div class="pin-inputs" id="confirmPinInputs">
+            <input type="password" maxlength="1" class="pin-box confirm-pin-box" inputmode="numeric" />
+            <input type="password" maxlength="1" class="pin-box confirm-pin-box" inputmode="numeric" />
+            <input type="password" maxlength="1" class="pin-box confirm-pin-box" inputmode="numeric" />
+            <input type="password" maxlength="1" class="pin-box confirm-pin-box" inputmode="numeric" />
+          </div>
+          <p class="pin-mismatch-msg hidden" id="pinMismatchMsg">❌ PINs don't match. Try again.</p>
+        </div>
+        <button class="primary-btn" id="createPinContinueBtn">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ GIFT OUT MODAL ══ -->
+  <div id="giftModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <button class="modal-back" data-close="giftModal">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h3>Send Gift</h3>
+      </div>
+      <div class="modal-body">
+        <div class="modal-balance-pill">
+          Star Balance: <strong id="giftStarBal">⭐ 0</strong>
+        </div>
+        <div class="form-group">
+          <label>Username or Email</label>
+          <input type="text" id="giftRecipient" placeholder="Enter username or email" />
+        </div>
+        <div class="form-group">
+          <label>Select Gift</label>
+          <button class="gift-select-trigger" id="giftSelectTrigger">
+            <span id="giftSelectLabel">🎁 Tap to choose a gift</span>
+            <i data-lucide="chevron-down" width="16" height="16"></i>
+          </button>
+          <input type="hidden" id="giftSelectValue" />
+        </div>
+        <button class="primary-btn" id="sendGiftBtn">Send Gift</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ GIFT PICKER MODAL ══ -->
+  <div id="giftPickerModal" class="modal-overlay hidden">
+    <div class="modal-box gift-picker-box">
+      <div class="modal-header">
+        <button class="modal-back" data-close="giftPickerModal">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h3>Choose a Gift</h3>
+      </div>
+      <div class="gift-picker-grid" id="giftPickerGrid"></div>
+    </div>
+  </div>
+
+  <!-- ══ RECHARGE MODAL ══ -->
+  <div id="rechargeModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <button class="modal-back" data-close="rechargeModal">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h3>Recharge Stars</h3>
+      </div>
+      <div class="modal-body">
+        <p class="modal-sub">Choose a package to buy stars</p>
+        <div class="recharge-grid" id="rechargeGrid"></div>
+        <div class="form-group" style="margin-top:16px;">
+          <label>Or enter custom star amount</label>
+          <input type="number" id="customStars" placeholder="e.g. 200" min="1" />
+        </div>
+        <p class="modal-sub" id="customCostDisplay"></p>
+        <button class="primary-btn" id="confirmRechargeBtn">Pay Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ WITHDRAW MODAL ══ -->
+  <div id="withdrawModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <button class="modal-back" data-close="withdrawModal">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h3>Withdraw</h3>
+      </div>
+      <div class="modal-body">
+        <div class="modal-balance-pill">
+          Available Balance: <strong id="withdrawAvailBal">₦ 0.00</strong>
+        </div>
+        <div class="form-group">
+          <label>Country</label>
+          <select id="withdrawCountry">
+            <option value="NG">🇳🇬 Nigeria</option>
+            <option value="KE">🇰🇪 Kenya</option>
+            <option value="GH">🇬🇭 Ghana</option>
+            <option value="ZA">🇿🇦 South Africa</option>
+            <option value="US">🇺🇸 United States</option>
+            <option value="GB">🇬🇧 United Kingdom</option>
+            <option value="ET">🇪🇹 Ethiopia</option>
+            <option value="TZ">🇹🇿 Tanzania</option>
+            <option value="UG">🇺🇬 Uganda</option>
+            <option value="SN">🇸🇳 Senegal</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Amount (<span id="withdrawCurrLabel">₦</span>)</label>
+          <input type="number" id="withdrawAmount" placeholder="Enter amount to withdraw" min="1" />
+        </div>
+        <div class="form-group">
+          <label>Bank Name</label>
+          <input type="text" id="withdrawBank" placeholder="e.g. GTBank, Access Bank, M-Pesa" />
+        </div>
+        <div class="form-group">
+          <label>Account Number</label>
+          <input type="text" id="withdrawAccountNumber" placeholder="Enter your bank account number" inputmode="numeric" />
+          <p class="field-hint">This is the account your money will be sent to</p>
+        </div>
+
+        <!-- EMAIL OTP (replaces phone) -->
+        <div class="form-group">
+          <label>Email (for verification)</label>
+          <div class="inline-row">
+            <input type="email" id="withdrawEmail" placeholder="Your registered email" style="flex:1;" />
+            <button class="send-code-btn" id="sendWithdrawCode">Send Code</button>
+          </div>
+          <p class="field-hint">A verification code will be sent to your email</p>
+        </div>
+        <div class="form-group">
+          <label>Verification Code</label>
+          <input type="text" id="withdrawCode" placeholder="Enter the code sent to your email" inputmode="numeric" maxlength="6" />
+        </div>
+        <button class="primary-btn" id="confirmWithdrawBtn">Withdraw Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CONVERT TO STARS MODAL ══ -->
+  <div id="convertModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <button class="modal-back" data-close="convertModal">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h3>Convert to Stars</h3>
+      </div>
+      <div class="modal-body">
+        <div class="modal-balance-pill">
+          Available: <strong id="convertAvailBal">₦ 0.00</strong>
+        </div>
+        <div class="form-group">
+          <label>Amount to Convert (<span id="convertCurrLabel">₦</span>)</label>
+          <input type="number" id="convertAmount" placeholder="Enter amount" min="1" />
+        </div>
+        <div class="convert-preview" id="convertPreview">
+          You will get ⭐ 0
+        </div>
+        <p class="modal-sub" style="text-align:center;font-size:12px;"></p>
+        <button class="primary-btn" id="confirmConvertBtn">Convert Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PIN MODAL (transaction confirm) ══ -->
+  <div id="pinModal" class="modal-overlay hidden">
+    <div class="modal-box small">
+      <div class="modal-header">
+        <h3>Enter PIN</h3>
+      </div>
+      <div class="modal-body">
+        <p class="modal-sub" id="pinLabel">Enter your wallet PIN to continue</p>
+        <div class="pin-inputs">
+          <input type="password" maxlength="1" class="pin-box" inputmode="numeric" />
+          <input type="password" maxlength="1" class="pin-box" inputmode="numeric" />
+          <input type="password" maxlength="1" class="pin-box" inputmode="numeric" />
+          <input type="password" maxlength="1" class="pin-box" inputmode="numeric" />
+        </div>
+        <button class="primary-btn" id="confirmPinBtn">Confirm</button>
+        <button class="text-btn" id="cancelPinBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TOAST ══ -->
+  <div id="walletToast" class="wallet-toast"></div>
+
+</div>
+<script src="js/theme.js"></script>
+<script src="wallet.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+@media (min-width: 1025px) {
+  .bottom-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 240px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 20px 12px;
+    background: #ffffff;
+    border-right: 1px solid #e5e7eb;
+    border-radius: 0;
+    box-shadow: none;
+    transform: none;
+    max-width: none;
+    overflow-y: auto;
+    z-index: 100;
+  }
+
+  .bnav-item {
+    width: 100%;
+    min-height: 82px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 14px 12px;
+    text-align: center;
+    text-decoration: none;
+    color: #6b7280;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    transition: background 0.2s ease,
+                border-color 0.2s ease,
+                color 0.2s ease,
+                transform 0.2s ease;
+    position: relative;
+  }
+
+  .bnav-item svg {
+    width: 28px;
+    height: 28px;
+    stroke: #6b7280;
+    transition: stroke 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .bnav-item span:not(.badge) {
+    display: block;
+    width: 100%;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+    color: inherit;
+  }
+
+  .bnav-item:hover {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+    color: #000a23;
+    transform: translateY(-1px);
+  }
+
+  .bnav-item:hover svg {
+    stroke: #000a23;
+    transform: scale(1.05);
+  }
+
+  .bnav-item.active {
+    background: #f3f4f6;
+    border-color: #e5e7eb;
+    color: #000a23;
+  }
+
+  .bnav-item.active svg {
+    stroke: #000a23;
+  }
+
+  .badge {
+    position: absolute;
+    top: 14px;
+    right: 22px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 999px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+  }
+}
+
+
+
+@media (min-width: 1025px) {
+  /* Desktop layout base */
+  body {
+    margin-left: 280px;
+    max-width: none;
+  }
+
+  .feed-main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 60px;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+
+  .top-nav {
+    position: sticky;
+    top: 0;
+    left: auto;
+    right: auto;
+    transform: none;
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    z-index: 120;
+    border-bottom: 1px solid #f3f4f6;
+  }
+}

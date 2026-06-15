@@ -1,0 +1,299 @@
+/* AFRISOCIAL — LOGIN (split layout: logo left, auth right) */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: #ffffff;
+  color: #0f1419;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── PAGE LAYOUT ── */
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+}
+
+/* LEFT — big logo panel */
+.logo-side {
+  flex: 1 1 55%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 40px;
+}
+
+.brand-logo {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* RIGHT — auth panel */
+.auth-side {
+  flex: 1 1 45%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px 60px;
+  background: #ffffff;
+}
+
+.auth-inner {
+  width: 100%;
+  max-width: 380px;
+}
+
+/* ── TYPOGRAPHY ── */
+.big-title {
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #0f1419;
+  margin-bottom: 40px;
+}
+
+.sub-title {
+  font-size: 31px;
+  font-weight: 700;
+  color: #0f1419;
+  margin-bottom: 28px;
+  letter-spacing: -0.01em;
+}
+
+/* ── ERROR ── */
+.error-wrap {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.25s ease;
+}
+.error-wrap.visible { max-height: 80px; margin-bottom: 14px; }
+
+.error {
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: #dc2626;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ── FORM ── */
+.login-form { display: flex; flex-direction: column; }
+
+.field-group { margin-bottom: 12px; }
+
+.field-input {
+  width: 100%;
+  height: 56px;
+  padding: 0 16px;
+  border: 1px solid #cfd9de;
+  border-radius: 6px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  color: #0f1419;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  -webkit-appearance: none;
+}
+
+.field-input::placeholder { color: #536471; }
+
+.field-input:focus {
+  border-color: #1d9bf0;
+  box-shadow: 0 0 0 1px #1d9bf0;
+}
+
+/* password */
+.input-c { position: relative; }
+.input-c .field-input { padding-right: 50px; }
+
+.eye {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #536471;
+  transition: background 0.15s;
+}
+.eye:hover { background: rgba(15, 20, 25, 0.06); }
+.eye svg { width: 18px; height: 18px; }
+
+/* ── SOCIAL BUTTONS ── */
+.btn-social {
+  width: 100%;
+  height: 44px;
+  border-radius: 9999px;
+  border: 1px solid #cfd9de;
+  background: #fff;
+  color: #0f1419;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  transition: background 0.15s ease;
+}
+.btn-social:hover { background: #f7f9f9; }
+
+/* Google spinner — pinned right, content stays centered */
+.btn-social { position: relative; }
+.btn-social .g-content { display: inline-flex; align-items: center; gap: 10px; }
+.btn-social .g-spinner {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  border: 2px solid rgba(15, 20, 25, 0.15);
+  border-top-color: #0f1419;
+  border-radius: 50%;
+  display: none;
+  animation: gspin 0.8s linear infinite;
+}
+.btn-social.is-loading { pointer-events: none; opacity: 0.85; }
+.btn-social.is-loading .g-spinner { display: block; }
+@keyframes gspin { to { transform: rotate(360deg); } }
+
+/* ── DIVIDER ── */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 6px 0 14px;
+  color: #0f1419;
+  font-size: 15px;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #cfd9de;
+}
+.divider span { padding: 0 10px; }
+
+/* ── PRIMARY ── */
+.btn-login {
+  width: 100%;
+  height: 44px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 9999px;
+  background: #0f1419;
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  position: relative;
+}
+.btn-login:hover:not(:disabled) { background: #272c30; }
+.btn-login:active:not(:disabled) { transform: scale(0.99); }
+.btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-spinner { display: none; }
+.btn-login.loading .btn-text { visibility: hidden; }
+.btn-login.loading .btn-spinner {
+  display: inline-block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.spinner-ring {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── FORGOT ── */
+.forgot-row { margin-top: 14px; }
+.forgot-link {
+  font-size: 14px;
+  color: #1d9bf0;
+  text-decoration: none;
+  font-weight: 500;
+}
+.forgot-link:hover { text-decoration: underline; }
+
+/* ── LEGAL ── */
+.legal-text {
+  margin-top: 18px;
+  font-size: 12px;
+  color: #536471;
+  line-height: 1.5;
+}
+.legal-text a {
+  color: #1d9bf0;
+  text-decoration: none;
+}
+.legal-text a:hover { text-decoration: underline; }
+
+/* ── SIGNUP ROW ── */
+.signup-row {
+  margin-top: 28px;
+  font-size: 15px;
+  color: #0f1419;
+  font-weight: 600;
+}
+.signup-row a {
+  color: #1d9bf0;
+  text-decoration: none;
+  font-weight: 600;
+}
+.signup-row a:hover { text-decoration: underline; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .page { flex-direction: column; }
+  .logo-side {
+    flex: 0 0 auto;
+    padding: 40px 24px 0;
+  }
+  .brand-logo { max-width: 140px; }
+  .auth-side {
+    flex: 1 1 auto;
+    padding: 24px 24px 48px;
+    justify-content: center;
+  }
+  .auth-inner { max-width: 100%; }
+  .big-title { font-size: 42px; margin-bottom: 24px; }
+  .sub-title { font-size: 24px; margin-bottom: 22px; }
+}
+
+@media (max-width: 480px) {
+  .big-title { font-size: 34px; }
+  .sub-title { font-size: 20px; }
+}
+
+/* hidden legacy elements kept for JS compatibility */
+.mobile-header, .hero-panel { display: none !important; }

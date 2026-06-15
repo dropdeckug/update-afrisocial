@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hashtags</title>
+  <link rel="stylesheet" href="hashtag.css" />
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════
+       MAIN FEED AREA
+  ════════════════════════════════════════ -->
+  <div class="feed-main" id="feedMain">
+
+    <!-- ════════════════════════════════════════
+         HASHTAG FILTER BAR (Sticky search + chips)
+    ════════════════════════════════════════ -->
+    <div class="hashtag-filter-bar">
+      <div class="search-wrapper">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" id="hashtagSearch" placeholder="Search hashtags..." class="hashtag-search-input" />
+        <div id="hashtagSuggestions" class="hashtag-suggestions-dropdown"></div>
+      </div>
+
+      <div class="hashtag-chips-scroll" id="hashtagChipsScroll">
+        <button class="hashtag-chip" data-tag="africa">#africa</button>
+        <button class="hashtag-chip" data-tag="afrobeats">#afrobeats</button>
+        <button class="hashtag-chip" data-tag="naija">#naija</button>
+        <button class="hashtag-chip" data-tag="music">#music</button>
+        <button class="hashtag-chip" data-tag="fashion">#fashion</button>
+        <button class="hashtag-chip" data-tag="food">#food</button>
+        <button class="hashtag-chip" data-tag="dance">#dance</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         FEED POSTS
+    ════════════════════════════════════════ -->
+    <div id="feed" class="feed">
+      <div style="padding: 20px; text-align: center; color: #9CA3AF; font-size: 14px;">
+        Select a hashtag to view posts
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         LOADING INDICATOR
+    ════════════════════════════════════════ -->
+    <div class="feed-loader" id="feedLoader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════
+       COMMENT MODAL (Bottom sheet)
+  ════════════════════════════════════════ -->
+  <div class="modal-overlay" id="commentModalOverlay">
+    <div class="comment-modal" id="commentModal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h3>Comments</h3>
+        <button class="modal-close" id="closeCommentModal">✕</button>
+      </div>
+      <div id="commentsList" class="comments-list"></div>
+      <div class="comment-input-section">
+        <input type="text" id="commentInput" placeholder="Write a comment..." />
+        <button id="submitComment">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       GIFT MODAL (Bottom sheet)
+  ════════════════════════════════════════ -->
+  <div class="modal-overlay" id="giftModalOverlay">
+    <div class="gift-modal" id="giftModal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h3>Send a Gift</h3>
+        <button class="modal-close" id="closeGiftModal">✕</button>
+      </div>
+      <div class="gift-balance">⭐ Your Stars: <span id="starBalance">250</span></div>
+      <div class="gift-grid" id="giftGrid">
+        <div class="gift-item" data-type="rose" data-cost="10">🌹<span>Rose</span><small>10 ⭐</small></div>
+        <div class="gift-item" data-type="fire" data-cost="25">🔥<span>Fire</span><small>25 ⭐</small></div>
+        <div class="gift-item" data-type="crown" data-cost="50">👑<span>Crown</span><small>50 ⭐</small></div>
+        <div class="gift-item" data-type="diamond" data-cost="100">💎<span>Diamond</span><small>100 ⭐</small></div>
+        <div class="gift-item" data-type="rocket" data-cost="150">🚀<span>Rocket</span><small>150 ⭐</small></div>
+        <div class="gift-item" data-type="trophy" data-cost="200">🏆<span>Trophy</span><small>200 ⭐</small></div>
+      </div>
+      <button class="send-gift-btn" id="sendGiftBtn">Send Gift</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SHARE MODAL (Bottom sheet)
+  ════════════════════════════════════════ -->
+  <div class="modal-overlay" id="shareModalOverlay">
+    <div class="share-modal" id="shareModal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h3>Share Post</h3>
+        <button class="modal-close" id="closeShareModal">✕</button>
+      </div>
+      <div class="share-grid">
+        <button class="share-option" id="shareWhatsapp">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+          </svg>
+          WhatsApp
+        </button>
+        <button class="share-option" id="shareFacebook">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+          </svg>
+          Facebook
+        </button>
+        <button class="share-option" id="shareTwitter">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+          </svg>
+          Twitter / X
+        </button>
+        <button class="share-option" id="copyLink">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+          Copy Link
+        </button>
+      </div>
+      <div id="copyFeedback" class="copy-feedback hidden">✅ Link copied!</div>
+    </div>
+  </div>
+
+  <script src="hashtag.js"></script>
+</body>
+</html>

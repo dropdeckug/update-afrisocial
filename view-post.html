@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Afrisocial — View Post</title>
+  <script src="/security.js"></script>
+  <script src="/linkify.js"></script>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#000A23" />
+  <link rel="icon" type="image/png" href="/uploads/favicon.png" />
+  <link rel="stylesheet" href="css/theme.css" />
+   <link rel="stylesheet" href="mention.css" />
+  <link rel="stylesheet" href="view-post.css" />
+</head>
+<body>
+
+  <div id="google_translate_element" style="display:none;"></div>
+
+  <!-- ══ TOP NAV ══ -->
+  <header class="top-nav">
+    <button class="nav-back" id="navBack">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+    </button>
+    <h1 class="brand">Post</h1>
+    <div class="top-nav-actions">
+      <button class="nav-icon-btn" id="notificationBtn">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+          stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span id="notificationBadge" class="notif-dot"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══ MAIN ══ -->
+  <main class="vp-main">
+
+    <!-- Loading state -->
+    <div id="vpLoader" class="vp-loader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+
+    <!-- Error state -->
+    <div id="vpError" class="vp-error" style="display:none;">
+      <div class="vp-error-icon">😕</div>
+      <h3>Post not found</h3>
+      <p>This post may have been deleted or the link is invalid.</p>
+      <a href="feed.html" class="btn-primary">Go to Feed</a>
+    </div>
+
+    <!-- Post container -->
+    <div id="vpPost" style="display:none;">
+
+      <!-- Post card -->
+      <div class="post" id="postCard">
+        <!-- Injected by JS -->
+      </div>
+
+      <!-- Guest banner — shown only when not logged in -->
+      <div class="guest-banner" id="guestBanner" style="display:none;">
+        <div class="guest-banner-inner">
+          <div class="guest-banner-text">
+            <strong>Join Afrisocial to interact</strong>
+            <p>Sign up or log in to like, comment and star this post</p>
+          </div>
+          <div class="guest-banner-btns">
+            <a href="signup.html" class="btn-primary" id="guestSignup">
+              Sign Up
+            </a>
+            <a href="login.html" class="btn-outline-dark" id="guestLogin">
+              Log In
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ══ BOTTOM NAV ══ -->
+  <nav class="bottom-nav">
+    <a href="feed.html" class="bnav-item">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 10.5C4 9.9 4.3 9.3 4.8 8.9L11.3 3.7C11.7 3.4
+          12.3 3.4 12.7 3.7L19.2 8.9C19.7 9.3 20 9.9 20
+          10.5V18.5C20 19.6 19.1 20.5 18 20.5H6C4.9
+          20.5 4 19.6 4 18.5V10.5Z"/>
+        <path d="M9 20.5V14.5C9 13.9 9.4 13.5 10
+          13.5H14C14.6 13.5 15 13.9 15 14.5V20.5"/>
+      </svg>
+      <span>Home</span>
+    </a>
+    <a href="/vybze.html" class="bnav-item">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="4"/>
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M12 9V3M12 21v-6M9 12H3M21 12h-6"/>
+      </svg>
+      <span>Vybze</span>
+    </a>
+    <a href="explore.html" class="bnav-item">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polygon points="16 8 14 14 8 16 10 10 16 8"/>
+      </svg>
+      <span>AfriExplore</span>
+    </a>
+    <a href="message.html" class="bnav-item">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1
+          2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span>Chats</span>
+    </a>
+    <a href="profile.html" class="bnav-item">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="12" cy="9" r="3"/>
+        <path d="M6.5 18C7.5 15.5 9.7 14 12 14C14.3
+          14 16.5 15.5 17.5 18"/>
+      </svg>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- ══ COMMENT MODAL ══ -->
+  <div id="commentModal" class="comment-modal">
+    <div class="comment-box">
+      <div class="comment-header">
+        <h3>Comments</h3>
+        <span id="closeCommentModal">&times;</span>
+      </div>
+      <div id="commentList" class="comment-list"></div>
+      <div class="comment-input-row" id="commentInputRow">
+        <input type="text" id="commentInput"
+          data-mention
+          placeholder="Write a comment..." />
+        <button id="sendCommentBtn">Send</button>
+      </div>
+      <!-- Guest comment prompt -->
+      <div class="comment-guest-row" id="commentGuestRow"
+        style="display:none;">
+        <p>
+          <a href="signup.html" id="commentSignupLink">Sign up</a>
+          or
+          <a href="log-in.html" id="commentLoginLink">log in</a>
+          to join the conversation
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TOAST ══ -->
+  <div class="toast" id="toast"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
+  <script src="/main.js" type="module"></script>
+  <script src="js/theme.js"></script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script src="/translate.js"></script>
+  <script src="view-post.js"></script>
+
+</body>
+</html>

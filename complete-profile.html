@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self';
+             script-src 'self' 'unsafe-inline';
+             style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+             font-src https://fonts.gstatic.com;
+             img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com;
+             connect-src 'self' https://afrisocial-backend.onrender.com;" />
+  <title>Complete your profile · Afrisocial</title>
+  <link rel="icon" type="image/png" href="/uploads/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="complete-profile.css" />
+</head>
+<body>
+
+  <main class="cp-page">
+    <div class="cp-card">
+
+      <div class="cp-header">
+        <div class="cp-avatar" id="avatarPreview" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21a8 8 0 0 1 16 0"/>
+          </svg>
+        </div>
+        <h1 class="cp-title">Complete your profile</h1>
+        <p class="cp-subtitle">A couple more details so your account is ready. Only you can see these.</p>
+      </div>
+
+      <div id="globalError" class="cp-error" role="alert"></div>
+
+      <!-- DOB WHEEL PICKER -->
+      <section class="cp-field">
+        <label class="cp-label">Date of birth</label>
+        <div class="cp-wheels" id="dobWheels">
+          <div class="cp-wheel" data-wheel="day" aria-label="Day"></div>
+          <div class="cp-wheel" data-wheel="month" aria-label="Month"></div>
+          <div class="cp-wheel" data-wheel="year" aria-label="Year"></div>
+          <div class="cp-wheel-mask"></div>
+          <div class="cp-wheel-highlight" aria-hidden="true"></div>
+        </div>
+        <p class="cp-hint">Swipe up or down on each column to pick.</p>
+      </section>
+
+      <!-- COUNTRY -->
+      <section class="cp-field">
+        <label class="cp-label" for="countryInput">Country of residence</label>
+        <div class="cp-country">
+          <input
+            type="text"
+            id="countryInput"
+            class="cp-country-input"
+            placeholder="Start typing your country…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button type="button" class="cp-country-toggle" id="countryToggle" aria-label="Open list">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <ul class="cp-country-list" id="countryList" role="listbox"></ul>
+        </div>
+      </section>
+
+      <!-- BIO -->
+      <section class="cp-field">
+        <label class="cp-label" for="bio">Bio <span class="cp-optional">(optional)</span></label>
+        <textarea
+          id="bio"
+          class="cp-bio"
+          placeholder="Tell us a little about yourself…"
+          maxlength="300"
+          rows="3"
+        ></textarea>
+        <div class="cp-counter"><span id="bioCount">0</span>/300</div>
+      </section>
+
+      <button type="button" class="cp-submit" id="completeBtn" disabled>
+        <span id="completeText">Complete</span>
+        <span id="completeSpinner" class="cp-spinner" hidden></span>
+      </button>
+
+    </div>
+  </main>
+
+  <script src="complete-profile.js"></script>
+</body>
+</html>

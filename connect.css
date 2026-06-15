@@ -1,0 +1,215 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #fff;
+  color: #0f1419;
+  min-height: 100vh;
+  padding: 0 0 96px;
+}
+
+.connect-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid #eff3f4;
+  padding: 18px 16px 14px;
+}
+
+.connect-header h1 {
+  max-width: 640px;
+  margin: 0 auto 5px;
+  font-size: 28px;
+  line-height: 1.08;
+  font-weight: 900;
+  color: #0f1419;
+}
+
+.connect-kicker,
+.connect-header p {
+  max-width: 640px;
+  margin: 0 auto;
+  color: #536471;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.connect-kicker {
+  color: #1d9bf0;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.connect-search-wrap {
+  max-width: 640px;
+  margin: 14px auto 0;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  background: #eff3f4;
+  border: 1px solid transparent;
+  border-radius: 999px;
+}
+
+.connect-search-wrap:focus-within {
+  background: #fff;
+  border-color: #1d9bf0;
+}
+
+.connect-search-wrap svg {
+  width: 18px;
+  height: 18px;
+  fill: #536471;
+  flex-shrink: 0;
+}
+
+.connect-header input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #0f1419;
+  font-size: 15px;
+}
+
+.connect-main {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.user-list { list-style: none; }
+
+.user-item,
+.user-skeleton,
+.empty-state {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eff3f4;
+  background: #fff;
+}
+
+.user-item { transition: background .15s ease; }
+.user-item:hover { background: #f7f9f9; }
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.user-info img,
+.sk-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #eff3f4;
+  flex-shrink: 0;
+}
+
+.user-copy { min-width: 0; }
+.user-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #0f1419;
+  font-weight: 800;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-country,
+.user-activity {
+  color: #536471;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.user-activity { display: inline-flex; align-items: center; gap: 4px; }
+
+.follow-btn {
+  min-width: 82px;
+  height: 36px;
+  border: none;
+  border-radius: 999px;
+  background: #0f1419;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .12s ease, background .15s ease, opacity .15s ease;
+  flex-shrink: 0;
+}
+
+.follow-btn:hover { background: #272c30; }
+.follow-btn:active { transform: scale(.96); }
+.follow-btn:disabled { opacity: .6; cursor: default; }
+
+.next-btn {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 640px;
+  height: 52px;
+  background: #1d9bf0;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 850;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(29,155,240,.28);
+  transition: opacity .15s ease, transform .15s ease, background .15s ease;
+  z-index: 1000;
+}
+
+.next-btn:hover:not(:disabled) { background: #1686d9; transform: translateX(-50%) translateY(-1px); }
+.next-btn:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
+
+.verified-icon { width: 16px; height: 16px; flex-shrink: 0; }
+
+.sk-stack { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.sk-line { height: 12px; border-radius: 999px; background: #eff3f4; }
+.sk-name { width: 46%; }
+.sk-handle { width: 34%; }
+.sk-meta { width: 58%; }
+.sk-button { width: 82px; height: 36px; border-radius: 999px; background: #eff3f4; }
+
+.sk-shimmer {
+  background: linear-gradient(90deg, #eff3f4 0%, #f7f9f9 48%, #eff3f4 100%);
+  background-size: 220% 100%;
+  animation: shimmer 1.05s ease-in-out infinite;
+}
+
+@keyframes shimmer { to { background-position: -220% 0; } }
+
+.empty-state {
+  justify-content: center;
+  text-align: center;
+  color: #536471;
+  font-weight: 650;
+}
+
+@media (max-width: 480px) {
+  .connect-header h1 { font-size: 24px; }
+  .user-item, .user-skeleton { padding: 13px 14px; }
+  .user-info img, .sk-avatar { width: 46px; height: 46px; }
+  .follow-btn, .sk-button { min-width: 76px; width: 76px; }
+}

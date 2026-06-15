@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AfriExplore</title>
+  <script src="/security.js"></script>
+  <script src="/linkify.js"></script>
+  <link rel="icon" type="image/png" href="/uploads/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000A23">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="explore.css">
+</head>
+<body>
+
+  <div id="google_translate_element" style="display:none;"></div>
+
+<!-- ══ TOP BAR ══ -->
+
+<header class="explore-topbar">
+  <a href="javascript:history.back()" class="explore-back-btn">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+      stroke="#000A23" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+  </a>
+  <h1 class="explore-brand">
+    <span class="brand-afri">Afri</span><span class="brand-explore">Explore</span>
+  </h1>
+  <button class="explore-searchbar-btn" id="openAfriSearch">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+      stroke="#9CA3AF" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <span>Search</span>
+  </button>
+</header>
+
+<!-- ══ AFRISEARCH MODAL ══ -->
+
+<div class="afrisearch-overlay hidden" id="afrisearchOverlay"></div>
+<div class="afrisearch-modal hidden" id="afrisearchModal">
+  <div class="afrisearch-topbar">
+    <button class="afrisearch-back" id="closeAfriSearch">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
+        stroke="#000A23" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+    </button>
+    <div class="afrisearch-input-wrap">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+        stroke="#9CA3AF" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="afrisearchInput"
+        placeholder="Ask the community anything..."
+        class="afrisearch-input" autocomplete="off"/>
+      <button id="clearAfriSearch"
+        class="afrisearch-clear hidden">&times;</button>
+    </div>
+  </div>
+
+  <div class="afrisearch-tab-row">
+    <button class="as-pill active" data-mode="askme">
+      <span class="pill-ask">Ask</span><span class="pill-me">Me</span>
+    </button>
+    <button class="as-pill" data-mode="afrisearch">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none"
+        stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      AfriSearch
+    </button>
+  </div>
+
+  <div id="afrisearchBody" class="afrisearch-body">
+    <!-- Ask Me home -->
+    <div id="askMeHome" class="askme-home">
+      <div class="askme-hero">
+        <div class="askme-hero-icon">🌍</div>
+        <h2>Ask the AfriExplore Community</h2>
+        <p>Get answers from Africans across the continent</p>
+      </div>
+      <span class="as-section-label">Try asking</span>
+      <div class="askme-chips">
+        <span class="askme-chip">What is the origin of Afrobeats?</span>
+        <span class="askme-chip">How do I get a visa to Kenya?</span>
+        <span class="askme-chip">Why is Lagos so popular?</span>
+        <span class="askme-chip">What is Eid like in West Africa?</span>
+        <span class="askme-chip">Where is the Great Rift Valley?</span>
+        <span class="askme-chip">Who invented the African drum?</span>
+      </div>
+    </div>
+
+```
+<!-- AfriSearch home -->
+<div id="afrisearchHome" class="afrisearch-home hidden">
+  <div class="afrisearch-hero">
+    <div class="afrisearch-hero-icon">📚</div>
+    <h2>Discover Africa</h2>
+    <p>Search African history, culture, traditions and more</p>
+  </div>
+  <span class="as-section-label">Popular searches</span>
+  <div class="as-popular">
+    <button class="as-popular-btn">🥁 African Drums</button>
+    <button class="as-popular-btn">🦁 Serengeti</button>
+    <button class="as-popular-btn">👑 Mansa Musa</button>
+    <button class="as-popular-btn">🏛️ Great Zimbabwe</button>
+    <button class="as-popular-btn">🌿 Ubuntu Philosophy</button>
+    <button class="as-popular-btn">🎭 Yoruba Culture</button>
+    <button class="as-popular-btn">⚔️ Zulu Kingdom</button>
+    <button class="as-popular-btn">🌍 Swahili Coast</button>
+    <button class="as-popular-btn">🎵 Afrobeats</button>
+    <button class="as-popular-btn">🏺 Ancient Egypt</button>
+    <button class="as-popular-btn">🌾 African Agriculture</button>
+    <button class="as-popular-btn">📖 Mali Empire</button>
+  </div>
+</div>
+
+<!-- Live results -->
+<div id="afrisearchLive" class="hidden">
+  <div class="as-suggest-row hidden" id="askSuggestRow">
+    <div class="as-suggest-icon ask-suggest">
+      <svg viewBox="0 0 24 24" width="16" height="16"
+        fill="none" stroke="#000A23" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M9 9a3 3 0 0 1 6 0c0 2-3 3-3 5"/>
+        <circle cx="12" cy="17" r="1" fill="#000A23"/>
+      </svg>
+    </div>
+    <div class="as-suggest-text">
+      <strong id="askSuggestText"></strong>
+      <span>Post as a question to the community</span>
+    </div>
+  </div>
+  <div id="knowledgeResult" class="knowledge-result hidden"></div>
+  <div id="userResults" class="hidden">
+    <span class="as-section-label"
+      style="padding:12px 16px 6px;display:block;">People</span>
+    <div id="userResultsList"></div>
+  </div>
+  <div id="noResult" class="no-result hidden">
+    <div>🔍</div>
+    <p>No results found. Try a different search.</p>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- ══ INNER NAV ══ -->
+
+<nav class="explore-inner-nav">
+  <button class="inner-nav-btn active" id="navAsk" data-tab="ask">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+      stroke="currentColor" stroke-width="2.2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M9 9a3 3 0 0 1 6 0c0 2-3 3-3 5"/>
+      <circle cx="12" cy="17" r="1" fill="currentColor"/>
+    </svg>
+    Ask
+  </button>
+  <button class="inner-nav-btn" id="navPost" data-tab="post">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+      stroke="currentColor" stroke-width="2.2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 20h9"/>
+      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+    </svg>
+    Post
+  </button>
+  <button class="inner-nav-btn" id="navCommunity" data-tab="community">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+      stroke="currentColor" stroke-width="2.2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+    Community
+  </button>
+</nav>
+
+<!-- ══ TWO PERSISTENT FEED CONTAINERS ══ -->
+
+<main class="explore-main">
+  <!-- Ask feed -->
+  <div id="askFeedWrap" class="feed-wrap active">
+    <div class="feed-loader" id="askFeedLoader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+    <div id="askFeed" class="explore-feed"></div>
+  </div>
+  <!-- Post feed -->
+  <div id="postFeedWrap" class="feed-wrap hidden">
+    <div class="feed-loader" id="postFeedLoader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+    <div id="postFeed" class="explore-feed"></div>
+  </div>
+  <!-- Community -->
+  <div id="communityWrap" class="feed-wrap hidden">
+    <div class="community-soon">
+      <div class="cs-icon">🌍</div>
+      <h2>Communities Coming Soon</h2>
+      <p>Create and join African communities by country,
+        culture, interest and more.<br><br>
+        We're building this for you. Stay tuned! 🙌</p>
+    </div>
+  </div>
+</main>
+
+<!-- ══ FAB (+) ══ -->
+
+<div class="fab-wrap">
+  <div class="fab-dropdown hidden" id="fabDropdown">
+    <button class="fab-drop-btn" id="fabAskBtn">
+      <div class="fab-drop-icon ask-icon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+          stroke="#000A23" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9 9a3 3 0 0 1 6 0c0 2-3 3-3 5"/>
+          <circle cx="12" cy="17" r="1" fill="#000A23"/>
+        </svg>
+      </div>
+      <div class="fab-drop-text">
+        <strong>Ask a Question</strong>
+        <span>Get answers from Africans</span>
+      </div>
+    </button>
+    <button class="fab-drop-btn" id="fabPostBtn">
+      <div class="fab-drop-icon post-icon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+          stroke="#FFA310" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9"/>
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+      </div>
+      <div class="fab-drop-text">
+        <strong>Create Post</strong>
+        <span>Share photos, videos or thoughts</span>
+      </div>
+    </button>
+  </div>
+  <button class="explore-fab" id="exploreFab">
+    <svg viewBox="0 0 24 24" width="26" height="26"
+      fill="none" stroke="#fff" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"/>
+      <line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  </button>
+</div>
+<div class="fab-backdrop hidden" id="fabBackdrop"></div>
+
+<!-- ══ ASK SHEET ══ -->
+
+<div class="sheet-overlay hidden" id="askOverlay"></div>
+<div class="bottom-sheet hidden" id="askSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <h2>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+        stroke="#000A23" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M9 9a3 3 0 0 1 6 0c0 2-3 3-3 5"/>
+        <circle cx="12" cy="17" r="1" fill="#000A23"/>
+      </svg>
+      Ask a Question
+    </h2>
+    <button class="sheet-close" id="closeAskSheet">&times;</button>
+  </div>
+  <div class="sheet-body">
+    <textarea id="questionInput" class="sheet-textarea"
+      placeholder="Start with What, How, Why, Where, Who...&#10;&#10;e.g. What is the best food in West Africa?"></textarea>
+    <p id="askError" class="sheet-error"></p>
+    <button class="sheet-submit-btn" id="submitQuestion">
+      <span id="askBtnText">Post Question</span>
+      <span id="askSpinner" class="btn-spinner hidden"></span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ POST MODAL ══ -->
+
+<div class="post-modal-overlay hidden" id="postModalOverlay"></div>
+<div class="post-modal hidden" id="postModal">
+  <button class="post-modal-close" id="closePostModal">&times;</button>
+  <div class="post-modal-header">
+    <div class="post-modal-africa-icon">🌍</div>
+    <h2>AfriExplore</h2>
+    <p>Your ideas and opinions matter a lot, contribute and share
+      ideas about Africa culture, traditions, history, news and more</p>
+  </div>
+  <div class="post-modal-body">
+    <div class="post-modal-user-row">
+      <img id="postModalAvatar" src="/uploads/images/africa.png"
+        class="post-modal-avatar"/>
+      <div>
+        <strong id="postModalName">AfriExplorer</strong>
+        <span id="postModalRegionPreview" class="region-preview"></span>
+      </div>
+    </div>
+    <input type="text" id="postTitle" class="post-modal-input"
+      placeholder="Title (optional)" maxlength="120"/>
+    <textarea id="postBody" class="post-modal-textarea"
+      placeholder="Share something meaningful..."></textarea>
+    <div class="post-modal-select-wrap">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+        stroke="#6B7280" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 6h16M4 12h16M4 18h7"/>
+      </svg>
+      <select id="postCategory" class="post-modal-select">
+        <option value="">Select Category</option>
+        <option value="culture">🎭 Culture</option>
+        <option value="politics">🏛️ Politics</option>
+        <option value="technology">💻 Technology</option>
+        <option value="history">📜 History</option>
+        <option value="business">💼 Business</option>
+        <option value="entertainment">🎵 Entertainment</option>
+        <option value="education">📚 Education</option>
+        <option value="sports">⚽ Sports</option>
+        <option value="religion">🕌 Religion</option>
+        <option value="news">📰 News</option>
+        <option value="agriculture">🌾 Agriculture</option>
+      </select>
+    </div>
+    <div class="post-modal-select-wrap">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+        stroke="#6B7280" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3
+          0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </svg>
+      <select id="postRegion" class="post-modal-select">
+        <option value="">Select Region</option>
+        <option value="West Africa">🌍 West Africa</option>
+        <option value="East Africa">🌍 East Africa</option>
+        <option value="North Africa">🌍 North Africa</option>
+        <option value="South Africa">🌍 South Africa</option>
+        <option value="Central Africa">🌍 Central Africa</option>
+        <option value="Africa">🌍 Africa (All)</option>
+      </select>
+    </div>
+    <div class="post-modal-media-section">
+      <input type="file" id="postModalMedia"
+        accept="image/*,video/*" multiple hidden/>
+      <button class="post-modal-media-btn" id="postModalMediaBtn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+          stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="3"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5L5 21"/>
+        </svg>
+        Add Photo / Video
+      </button>
+      <div id="postModalPreview" class="post-modal-preview"></div>
+    </div>
+    <p id="postModalError" class="sheet-error"></p>
+    <button class="post-modal-submit" id="submitExplorePost">
+      <span id="postModalBtnText">Post</span>
+      <span id="postModalSpinner" class="btn-spinner hidden"></span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ COMMENT MODAL ══ -->
+
+<div id="commentModal" class="comment-modal">
+  <div class="comment-box">
+    <div class="comment-header">
+      <h3>Comments</h3>
+      <span id="closeCommentModal">&times;</span>
+    </div>
+    <div id="commentList" class="comment-list"></div>
+    <div class="comment-input-row">
+      <input type="text" id="commentInput"
+        placeholder="Write a comment..."/>
+      <button id="sendCommentBtn">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GUEST MODAL ══ -->
+
+<div class="guest-modal hidden" id="guestModal">
+  <div class="guest-box">
+    <h3>Join Afrisocial</h3>
+    <p>Sign up or log in to interact with AfriExplore.</p>
+    <a href="/signup.html" class="guest-signup-btn">Sign Up</a>
+    <a href="/login.html" class="guest-login-btn">Log In</a>
+    <button id="closeGuestModal" class="guest-close">Maybe later</button>
+  </div>
+</div>
+
+<div id="notificationBox"></div>
+<script src="js/theme.js"></script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script src="/translate.js"></script>
+  <script src="explore.js"></script> 
+</body>
+</html>
