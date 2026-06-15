@@ -1287,11 +1287,36 @@ function closeInstallPopup() { document.getElementById("installPopup").style.dis
 window.addEventListener("appinstalled", async () => { try { await fetch(`${baseUrl}/api/analytics/install`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` } }); } catch {} });
 
 // ================== INFINITE SCROLL ==================
-feedMain.addEventListener("scroll", () => {
-  if (loading || !hasMore) return;
-  const { scrollTop, scrollHeight, clientHeight } = feedMain;
-  if (scrollHeight - scrollTop - clientHeight < 800) { loading = true; page++; loadFeed().then(() => { loading = false; }); }
-});
+// Use IntersectionObserver on a sentinel so it works whether the page
+// scrolls via window (desktop 3-col layout) or via .feed-main (mobile).
+(function setupInfiniteScroll() {
+  const sentinel = document.createElement("div");
+  sentinel.id = "feedSentinel";
+  sentinel.style.cssText = "height:1px;width:100%;";
+  // Append after #feed so it sits before the loader DOM but at end of content.
+  feedBox.parentNode.insertBefore(sentinel, feedLoader);
+
+  const trigger = () => {
+    if (loading || !hasMore) return;
+    loading = true; page++;
+    loadFeed().finally(() => { loading = false; });
+  };
+
+  const io = new IntersectionObserver((entries) => {
+    if (entries.some(e => e.isIntersecting)) trigger();
+  }, { rootMargin: "800px 0px", threshold: 0 });
+  io.observe(sentinel);
+
+  // Belt-and-suspenders: also listen on window + feedMain scroll for any
+  // edge cases where IntersectionObserver misfires (e.g. very tall viewport).
+  const scrollCheck = () => {
+    if (loading || !hasMore) return;
+    const r = sentinel.getBoundingClientRect();
+    if (r.top - window.innerHeight < 800) trigger();
+  };
+  window.addEventListener("scroll", scrollCheck, { passive: true });
+  feedMain.addEventListener("scroll", scrollCheck, { passive: true });
+})();
 
 // ══════════════════════════════════════════════
 //  VYBZE SECTION
