@@ -104,6 +104,11 @@
   }
 
   function mount() {
+    // Mark body so shared-nav.css can suppress the global padding-left
+    // (otherwise the .x-layout grid is pushed off-screen on desktop).
+    if (document.querySelector('.x-layout')) {
+      document.body.classList.add('xn-has-layout');
+    }
     document.querySelectorAll('[data-shared-nav]').forEach(el => {
       el.outerHTML = '<nav class="xn-sidebar" data-xn-mounted>' + buildSidebarHTML() + '</nav>';
     });

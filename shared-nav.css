@@ -99,7 +99,12 @@ body.xn-hide-nav .xn-sidebar { display: none !important; }
 
 /* DESKTOP ≥1025px */
 @media (min-width: 1025px) {
-  body { background: #fff; }
+  /* IMPORTANT: many legacy pages set `body { max-width: 680px }` for mobile-
+     centered layouts. That constraint collapses the 3-col grid down to a
+     few pixels on desktop. Reset it whenever shared-nav is loaded. */
+  body { background: #fff; max-width: none !important; margin: 0 !important; }
+  body.xn-has-layout { padding-left: 0 !important; padding-right: 0 !important; }
+
   .x-layout {
     display: grid;
     grid-template-columns: 275px minmax(0, 600px) 350px;
@@ -107,7 +112,9 @@ body.xn-hide-nav .xn-sidebar { display: none !important; }
     max-width: 1290px;
     margin: 0 auto;
     align-items: start;
+    width: 100%;
   }
+
 
   .xn-sidebar {
     position: fixed;
@@ -239,4 +246,159 @@ body.xn-hide-nav .xn-sidebar { display: none !important; }
   }
   .xn-rightrail .xn-legal { color: var(--xn-muted); font-size: 13px; padding: 8px 4px 24px; line-height: 1.6; }
   .xn-rightrail .xn-legal a { color: var(--xn-muted); text-decoration: none; margin-right: 8px; }
+}
+
+/* ============================================================
+   CREATE POST MODAL (X-style, dark, blur backdrop)
+   Pages opt in by giving the overlay .xp-overlay and modal .xp-modal.
+   ============================================================ */
+.xp-overlay {
+  position: fixed; inset: 0;
+  background: rgba(91,112,131,.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  z-index: 998;
+  animation: xpFadeIn .15s ease;
+}
+.xp-overlay.active { display: block; }
+@keyframes xpFadeIn { from { opacity:0 } to { opacity:1 } }
+
+.xp-modal {
+  position: fixed;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%) scale(.98);
+  width: min(600px, calc(100% - 24px));
+  max-height: 90vh;
+  background: #000;
+  color: #e7e9ea;
+  border-radius: 16px;
+  border: 1px solid #2f3336;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 999;
+  font-family: inherit;
+}
+.xp-modal.open {
+  display: flex;
+  animation: xpPop .18s ease forwards;
+}
+@keyframes xpPop {
+  to { transform: translate(-50%, -50%) scale(1); }
+}
+@media (max-width: 640px) {
+  .xp-modal {
+    top: 0; left: 0; transform: none;
+    width: 100%; height: 100dvh; max-height: 100dvh;
+    border-radius: 0; border: none;
+  }
+  .xp-modal.open { animation: none; }
+}
+
+.xp-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px;
+}
+.xp-close {
+  background: transparent; border: none; color: #e7e9ea;
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .15s ease;
+}
+.xp-close:hover { background: rgba(239,243,244,.1); }
+.xp-drafts {
+  background: transparent; border: none;
+  color: #1d9bf0; font-weight: 700; font-size: 15px;
+  padding: 6px 12px; border-radius: 9999px; cursor: pointer;
+}
+.xp-drafts:hover { background: rgba(29,155,240,.1); }
+
+.xp-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 16px 12px;
+}
+.xp-row { display: flex; gap: 12px; }
+.xp-avatar {
+  width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+  flex-shrink: 0;
+}
+.xp-row-main { flex: 1; min-width: 0; }
+
+.xp-audience {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: transparent; border: 1px solid #1d9bf0;
+  color: #1d9bf0; font-weight: 700; font-size: 14px;
+  padding: 2px 12px; border-radius: 9999px; cursor: pointer;
+  margin: 4px 0 6px;
+}
+.xp-input {
+  width: 100%; min-height: 120px;
+  background: transparent; border: none; outline: none; resize: none;
+  color: #e7e9ea; font-size: 20px; line-height: 1.4;
+  font-family: inherit; padding: 8px 0;
+}
+.xp-input::placeholder { color: #71767b; transition: opacity .25s ease; }
+.xp-input.xp-fading::placeholder { opacity: 0; }
+
+.xp-reply-scope {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent; border: none;
+  color: #1d9bf0; font-weight: 700; font-size: 14px;
+  padding: 8px 0 12px; cursor: pointer;
+  border-bottom: 1px solid #2f3336;
+  width: 100%; justify-content: flex-start;
+}
+
+.xp-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px 12px;
+  border-top: 1px solid #2f3336;
+}
+.xp-tools { display: flex; align-items: center; gap: 2px; }
+.xp-tool-btn {
+  background: transparent; border: none;
+  color: #1d9bf0; width: 36px; height: 36px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .15s ease;
+}
+.xp-tool-btn:hover { background: rgba(29,155,240,.1); }
+
+.xp-submit-wrap { display: flex; align-items: center; gap: 12px; }
+.xp-counter { position: relative; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
+.xp-counter-ring { display: block; }
+.xp-counter-num {
+  position: absolute; font-size: 11px; color: #71767b;
+}
+.xp-counter.warn #postCounterArc { stroke: #ffd400; }
+.xp-counter.danger #postCounterArc { stroke: #f4212e; }
+.xp-counter.danger .xp-counter-num { color: #f4212e; }
+
+.xp-post-btn {
+  background: #eff3f4 !important;
+  color: #0f1419 !important;
+  font-weight: 700;
+  border: none;
+  border-radius: 9999px;
+  padding: 8px 16px;
+  cursor: pointer;
+  min-width: 76px;
+  font-size: 15px;
+}
+.xp-post-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Media preview in the X-style modal */
+.xp-modal .media-preview-container { margin-top: 12px; }
+.xp-modal .media-preview-container img,
+.xp-modal .media-preview-container video {
+  border-radius: 14px;
+  max-width: 100%;
+}
+.xp-modal .remove-media-btn {
+  background: rgba(15,20,25,.75); color: #fff;
+  border: none; border-radius: 9999px;
+  padding: 6px 14px; font-size: 13px;
+  font-weight: 700; cursor: pointer;
+  margin-bottom: 8px;
 }

@@ -167,12 +167,21 @@ const postModalOverlay = document.getElementById("postModalOverlay");
 const cancelPost       = document.getElementById("cancelPost");
 const openPostBtn      = document.getElementById("openPost");
 
-function openCreatePost()  { plusDropdown.classList.remove("open"); postModal.classList.add("open"); postModalOverlay.classList.add("active"); document.body.style.overflow = "hidden"; }
+function openCreatePost()  { if (typeof plusDropdown !== "undefined" && plusDropdown) plusDropdown.classList.remove("open"); postModal.classList.add("open"); postModalOverlay.classList.add("active"); document.body.style.overflow = "hidden"; setTimeout(() => { const el = document.getElementById("postInput"); if (el) el.focus(); }, 50); }
 function closeCreatePost() { postModal.classList.remove("open"); postModalOverlay.classList.remove("active"); document.body.style.overflow = ""; }
 
-openPostBtn.addEventListener("click", openCreatePost);
+if (openPostBtn) openPostBtn.addEventListener("click", openCreatePost);
 cancelPost.addEventListener("click", closeCreatePost);
 postModalOverlay.addEventListener("click", e => { if (e.target === postModalOverlay) closeCreatePost(); });
+
+// Hook into the shared sidebar "Post" button.
+window.addEventListener("open-create-post", () => {
+  const xnBtn = document.getElementById("xnPostBtn");
+  if (xnBtn) xnBtn.dataset.handled = "1";
+  openCreatePost();
+});
+// Also support deep link #new from other pages.
+if (location.hash === "#new") { setTimeout(openCreatePost, 100); history.replaceState(null, "", location.pathname); }
 
 async function loadSheetAvatar() {
   const userId = localStorage.getItem("userId"); if (!userId) return;
@@ -186,39 +195,110 @@ async function loadSheetAvatar() {
 loadSheetAvatar();
 
 const mediaUploadBtn = document.getElementById("mediaUploadBtn");
+const videoUploadBtn = document.getElementById("videoUploadBtn");
 const postMedia      = document.getElementById("postMedia");
+const postVideoMedia = document.getElementById("postVideoMedia");
 const mediaPreview   = document.getElementById("mediaPreview");
 
-mediaUploadBtn.addEventListener("click", () => postMedia.click());
-postMedia.addEventListener("change", function () {
-  const files = Array.from(this.files); if (!files.length) return;
+function clearMediaPreview() {
   mediaPreview.innerHTML = "";
-  const images = files.filter(f => f.type.startsWith("image/"));
-  const videos = files.filter(f => f.type.startsWith("video/"));
-  if (videos.length > 1) { alert("One video per post only."); postMedia.value = ""; return; }
-  if (images.length && videos.length) { alert("Cannot mix images and video."); postMedia.value = ""; return; }
-  if (videos.length === 1) {
-    const v = document.createElement("video"); v.src = URL.createObjectURL(videos[0]); v.controls = true; v.className = "preview-video";
-    mediaPreview.appendChild(v);
-  }
-  if (images.length) {
-    const grid = document.createElement("div"); grid.className = "image-preview-grid";
-    images.forEach(img => { const el = document.createElement("img"); el.src = URL.createObjectURL(img); grid.appendChild(el); });
-    mediaPreview.appendChild(grid);
-  }
-  const removeBtn = document.createElement("button"); removeBtn.textContent = "Remove Media"; removeBtn.className = "remove-media-btn";
-  removeBtn.onclick = () => { mediaPreview.innerHTML = ""; postMedia.value = ""; };
+  postMedia.value = "";
+  if (postVideoMedia) postVideoMedia.value = "";
+  updatePostButtonState();
+}
+function renderImagePreview(files) {
+  mediaPreview.innerHTML = "";
+  const grid = document.createElement("div"); grid.className = "image-preview-grid";
+  files.forEach(img => { const el = document.createElement("img"); el.src = URL.createObjectURL(img); grid.appendChild(el); });
+  mediaPreview.appendChild(grid);
+  const removeBtn = document.createElement("button"); removeBtn.textContent = "Remove"; removeBtn.className = "remove-media-btn";
+  removeBtn.onclick = clearMediaPreview;
   mediaPreview.prepend(removeBtn);
+  updatePostButtonState();
+}
+function renderVideoPreview(file) {
+  mediaPreview.innerHTML = "";
+  const v = document.createElement("video"); v.src = URL.createObjectURL(file); v.controls = true; v.className = "preview-video";
+  mediaPreview.appendChild(v);
+  const removeBtn = document.createElement("button"); removeBtn.textContent = "Remove"; removeBtn.className = "remove-media-btn";
+  removeBtn.onclick = clearMediaPreview;
+  mediaPreview.prepend(removeBtn);
+  updatePostButtonState();
+}
+
+mediaUploadBtn.addEventListener("click", () => { if (postVideoMedia) postVideoMedia.value = ""; postMedia.click(); });
+if (videoUploadBtn) videoUploadBtn.addEventListener("click", () => { postMedia.value = ""; postVideoMedia.click(); });
+postMedia.addEventListener("change", function () {
+  const files = Array.from(this.files).filter(f => f.type.startsWith("image/"));
+  if (!files.length) return;
+  renderImagePreview(files);
+});
+if (postVideoMedia) postVideoMedia.addEventListener("change", function () {
+  const f = this.files && this.files[0];
+  if (!f) return;
+  if (!f.type.startsWith("video/")) { alert("Please pick a video file."); this.value = ""; return; }
+  renderVideoPreview(f);
 });
 
-const postBtn     = document.getElementById("postBtn");
-const postInput   = document.getElementById("postInput");
-const postBtnText = document.getElementById("postBtnText");
-const postSpinner = document.getElementById("postSpinner");
+const postBtn         = document.getElementById("postBtn");
+const postInput       = document.getElementById("postInput");
+const postBtnText     = document.getElementById("postBtnText");
+const postSpinner     = document.getElementById("postSpinner");
+const postCounter     = document.getElementById("postCounter");
+const postCounterArc  = document.getElementById("postCounterArc");
+const postCounterNum  = document.getElementById("postCounterNum");
+
+// ── Character counter (500 max) with circular progress ──
+const MAX_CHARS = 500;
+const RING_C    = 2 * Math.PI * 10; // r=10
+function updatePostButtonState() {
+  if (!postBtn) return;
+  const len = (postInput?.value || "").length;
+  const hasMedia = (postMedia.files && postMedia.files.length > 0) || (postVideoMedia && postVideoMedia.files && postVideoMedia.files.length > 0);
+  postBtn.disabled = (len === 0 && !hasMedia) || len > MAX_CHARS;
+
+  if (postCounter) {
+    if (len === 0) {
+      postCounter.hidden = true;
+    } else {
+      postCounter.hidden = false;
+      const pct = Math.min(1, len / MAX_CHARS);
+      postCounterArc.setAttribute("stroke-dashoffset", String(RING_C * (1 - pct)));
+      postCounter.classList.toggle("warn", len >= MAX_CHARS - 50 && len < MAX_CHARS);
+      postCounter.classList.toggle("danger", len >= MAX_CHARS - 10);
+      postCounterNum.textContent = len >= MAX_CHARS - 20 ? String(MAX_CHARS - len) : "";
+    }
+  }
+}
+if (postInput) postInput.addEventListener("input", updatePostButtonState);
+updatePostButtonState();
+
+// ── Rotating placeholder ──
+const PLACEHOLDERS = [
+  "What's happening?",
+  "Share something with Africa…",
+  "What's on your mind today?",
+  "Drop a vybe…",
+  "Tell your story",
+  "What's the latest?"
+];
+let phIdx = 0;
+setInterval(() => {
+  if (!postInput || document.activeElement === postInput || postInput.value.length > 0) return;
+  postInput.classList.add("xp-fading");
+  setTimeout(() => {
+    phIdx = (phIdx + 1) % PLACEHOLDERS.length;
+    postInput.placeholder = PLACEHOLDERS[phIdx];
+    postInput.classList.remove("xp-fading");
+  }, 250);
+}, 3200);
 
 postBtn.onclick = async () => {
   const text  = postInput.value.trim();
-  const files = postMedia.files;
+  if (text.length > MAX_CHARS) return;
+  const imageFiles = postMedia.files && postMedia.files.length ? Array.from(postMedia.files) : [];
+  const videoFile  = postVideoMedia && postVideoMedia.files && postVideoMedia.files[0] ? postVideoMedia.files[0] : null;
+  const files = videoFile ? [videoFile] : imageFiles;
   if (!text && files.length === 0) return;
   if (text) {
     const modResult = scanContent(text);
@@ -233,11 +313,10 @@ postBtn.onclick = async () => {
   try {
     const res = await fetch(`${baseUrl}/api/posts`, { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: formData });
     if (!res.ok) throw new Error("Post failed");
-    postInput.value = ""; postMedia.value = ""; mediaPreview.innerHTML = ""; closeCreatePost();
+    postInput.value = ""; clearMediaPreview(); closeCreatePost();
     page = 1; loadedPosts.clear(); hasMore = true; suggestedInjected = false; feedBox.innerHTML = "";
     const newPost = await res.json();
     window.location.href = `/post-success.html?postId=${newPost._id}`;
-    feedMain.scrollTo({ top: 0, behavior: "smooth" });
   } catch (err) { console.error("Create post error:", err); }
   postBtn.disabled = false; postBtnText.textContent = "Post"; postSpinner.style.display = "none";
 };
