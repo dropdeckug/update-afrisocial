@@ -93,10 +93,29 @@ clearRecentBtn.onclick = () => {
 };
 
 // Search API
+function renderSkeletons() {
+  panels.forEach(p => p.classList.remove("active"));
+  document.getElementById(`panel-${activeTab}`).classList.add("active");
+  const target = document.getElementById(`panel-${activeTab}`);
+  target.innerHTML = "";
+  for (let i = 0; i < 6; i++) {
+    target.insertAdjacentHTML("beforeend",
+      `<div class="sk-card">
+         <span class="sk-avatar"></span>
+         <div class="sk-lines">
+           <span class="sk-line sk-line-lg" style="width:${50 + (i%3)*10}%"></span>
+           <span class="sk-line sk-line-sm" style="width:${30 + (i%4)*8}%"></span>
+           <span class="sk-line" style="width:${80 - (i%3)*10}%"></span>
+         </div>
+       </div>`);
+  }
+}
+
 async function search(query) {
   saveRecent(query);
   showResults();
-  resultsMeta.textContent = "Searching...";
+  resultsMeta.textContent = "Searching…";
+  renderSkeletons();
 
   try {
   const res = await fetch(

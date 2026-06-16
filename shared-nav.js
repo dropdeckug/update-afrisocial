@@ -79,28 +79,85 @@
     return html;
   }
 
+  // Trending hashtags — until a backend endpoint exists, use a curated list
+  // of African-focused tags that link into the real /hashtag.html page.
+  const TRENDING = [
+    { tag: "Afrobeats",  meta: "Trending",         posts: "128K posts" },
+    { tag: "AFCON",      meta: "Sports · Trending",posts: "94.3K posts" },
+    { tag: "Naija",      meta: "Trending",         posts: "52.1K posts" },
+    { tag: "Amapiano",   meta: "Music · Trending", posts: "41.8K posts" },
+    { tag: "Lagos",      meta: "Trending",         posts: "29K posts"   }
+  ];
+
   function buildRightRailHTML() {
+    let trendHTML = '';
+    TRENDING.forEach(t => {
+      trendHTML +=
+        '<a href="/hashtag.html?tag=' + encodeURIComponent(t.tag) + '" class="xn-trend xn-trend-link">' +
+          '<span class="xn-trend-meta">' + t.meta + '</span>' +
+          '<strong>#' + t.tag + '</strong>' +
+          '<span class="xn-trend-meta">' + t.posts + '</span>' +
+        '</a>';
+    });
     return (
       '<section class="xn-card">' +
         '<h3>Trending in Africa</h3>' +
-        '<div class="xn-trend"><span class="xn-trend-meta">Trending</span><strong>#Afrobeats</strong><span class="xn-trend-meta">128K posts</span></div>' +
-        '<div class="xn-trend"><span class="xn-trend-meta">Sports · Trending</span><strong>#AFCON</strong><span class="xn-trend-meta">94.3K posts</span></div>' +
-        '<div class="xn-trend"><span class="xn-trend-meta">Trending</span><strong>#Naija</strong><span class="xn-trend-meta">52.1K posts</span></div>' +
-        '<div class="xn-trend"><span class="xn-trend-meta">Music · Trending</span><strong>#Amapiano</strong><span class="xn-trend-meta">41.8K posts</span></div>' +
-        '<div class="xn-trend"><span class="xn-trend-meta">Trending</span><strong>#Lagos</strong><span class="xn-trend-meta">29K posts</span></div>' +
+        trendHTML +
       '</section>' +
       '<section class="xn-card">' +
         '<h3>Who to follow</h3>' +
-        '<div class="xn-follow">' +
-          '<img src="/uploads/images/africa.png" alt="" onerror="this.src=\'/Afrisocial.jpg\'">' +
-          '<div class="xn-follow-info"><strong>Afrisocial</strong><span>@afrisocial</span></div>' +
-          '<button class="xn-follow-btn" type="button">Follow</button>' +
+        '<div id="xnSuggestedList" class="xn-suggested">' +
+          '<div class="xn-follow xn-follow-skel"><span class="skeleton skeleton-circle" style="width:40px;height:40px"></span><div class="xn-follow-info"><span class="skeleton skeleton-text" style="width:60%"></span><span class="skeleton skeleton-text sm" style="width:40%"></span></div></div>' +
+          '<div class="xn-follow xn-follow-skel"><span class="skeleton skeleton-circle" style="width:40px;height:40px"></span><div class="xn-follow-info"><span class="skeleton skeleton-text" style="width:55%"></span><span class="skeleton skeleton-text sm" style="width:35%"></span></div></div>' +
+          '<div class="xn-follow xn-follow-skel"><span class="skeleton skeleton-circle" style="width:40px;height:40px"></span><div class="xn-follow-info"><span class="skeleton skeleton-text" style="width:65%"></span><span class="skeleton skeleton-text sm" style="width:45%"></span></div></div>' +
         '</div>' +
+        '<a class="xn-show-more" href="/connect.html">Show more</a>' +
       '</section>' +
       '<p class="xn-legal">' +
         '<a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · <a href="/about.html">About</a><br>© 2026 Afrisocial' +
       '</p>'
     );
+  }
+
+  async function hydrateSuggested() {
+    const list = document.getElementById('xnSuggestedList');
+    if (!list) return;
+    const token = localStorage.getItem('token');
+    const base = (window.AFRI_API_BASE) || 'https://afrisocial-backend.onrender.com';
+    if (!token) { list.innerHTML = '<p style="color:var(--xn-muted);font-size:14px;padding:6px 0;">Log in to see suggestions.</p>'; return; }
+    try {
+      const res = await fetch(base + '/api/users/suggested', { headers: { Authorization: 'Bearer ' + token } });
+      if (!res.ok) throw new Error('http ' + res.status);
+      const data = await res.json();
+      const users = (data && (data.users || data)) || [];
+      if (!users.length) { list.innerHTML = '<p style="color:var(--xn-muted);font-size:14px;padding:6px 0;">No suggestions right now.</p>'; return; }
+      list.innerHTML = users.slice(0, 3).map(u => (
+        '<div class="xn-follow" data-uid="' + u._id + '">' +
+          '<a href="/profile.html?userId=' + u._id + '"><img src="' + (u.profilePicture || '/uploads/images/africa.png') + '" alt="" onerror="this.src=\'/uploads/images/africa.png\'"></a>' +
+          '<a class="xn-follow-info" href="/profile.html?userId=' + u._id + '">' +
+            '<strong>' + (u.fullName || u.username || 'User') + '</strong>' +
+            '<span>@' + (u.username || '') + '</span>' +
+          '</a>' +
+          '<button class="xn-follow-btn" type="button" data-follow="' + u._id + '">Follow</button>' +
+        '</div>'
+      )).join('');
+      list.querySelectorAll('[data-follow]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const uid = btn.dataset.follow;
+          btn.disabled = true; btn.textContent = 'Following…';
+          try {
+            const r = await fetch(base + '/api/users/follow/' + uid, { method: 'POST', headers: { Authorization: 'Bearer ' + token } });
+            if (!r.ok) throw new Error();
+            btn.textContent = 'Following';
+            btn.classList.add('following');
+          } catch {
+            btn.disabled = false; btn.textContent = 'Follow';
+          }
+        });
+      });
+    } catch (e) {
+      list.innerHTML = '<p style="color:var(--xn-muted);font-size:14px;padding:6px 0;">Couldn\'t load suggestions.</p>';
+    }
   }
 
   function mount() {
@@ -115,6 +172,7 @@
     document.querySelectorAll('[data-shared-rightrail]').forEach(el => {
       el.outerHTML = '<aside class="xn-rightrail" data-xn-mounted>' + buildRightRailHTML() + '</aside>';
     });
+    hydrateSuggested();
 
     // Post button: dispatch event that pages can listen to, or fallback to /feed.html
     const postBtn = document.getElementById('xnPostBtn');

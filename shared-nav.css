@@ -246,6 +246,13 @@ body.xn-hide-nav .xn-sidebar { display: none !important; }
   }
   .xn-rightrail .xn-legal { color: var(--xn-muted); font-size: 13px; padding: 8px 4px 24px; line-height: 1.6; }
   .xn-rightrail .xn-legal a { color: var(--xn-muted); text-decoration: none; margin-right: 8px; }
+  .xn-rightrail .xn-trend-link { display: block; text-decoration: none; color: inherit; transition: background .15s ease; padding-left: 8px; margin-left: -8px; padding-right: 8px; border-radius: 8px; }
+  .xn-rightrail .xn-trend-link:hover { background: rgba(15,20,25,.04); }
+  .xn-rightrail .xn-follow .xn-follow-info { text-decoration: none; color: inherit; }
+  .xn-rightrail .xn-follow .xn-follow-btn.following { background: #fff; color: var(--xn-fg); border: 1px solid #cfd9de; }
+  .xn-rightrail .xn-follow-skel { opacity: .9; }
+  .xn-rightrail .xn-show-more { display: block; padding: 12px 0 4px; color: var(--xn-accent); font-size: 14px; text-decoration: none; font-weight: 500; }
+  .xn-rightrail .xn-show-more:hover { text-decoration: underline; }
 }
 
 /* ============================================================
